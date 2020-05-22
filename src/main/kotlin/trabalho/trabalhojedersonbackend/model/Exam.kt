@@ -1,13 +1,19 @@
 package trabalho.trabalhojedersonbackend.model
 
+import trabalho.trabalhojedersonbackend.enums.StatusEnum
 import java.time.LocalDateTime
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
 
+@Entity
 class Exam(
-        id: Long,
-        requestDate: LocalDateTime,
-        emissionDate: LocalDateTime,
-        type: String
-//        status: Status
+        @Id @GeneratedValue(strategy = GenerationType.AUTO)
+        val id: Long,
+        val requestDate: LocalDateTime,
+        val emissionDate: LocalDateTime,
+        val type: String,
+        val status: StatusEnum
 ) {
-
 }
