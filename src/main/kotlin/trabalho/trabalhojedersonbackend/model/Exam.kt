@@ -13,7 +13,10 @@ class Exam(
         val id: Long,
         val requestDate: LocalDateTime,
         val emissionDate: LocalDateTime,
-        val type: String,
+        val data: Map<String,String>,
+        val patient: Patient,
+        val doctor: Doctor,
+        val clinic: Clinic,
         val status: StatusEnum
 ) {
 }
