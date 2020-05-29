@@ -12,6 +12,8 @@ class Exam(
         @CreationTimestamp
         val requestDate: LocalDateTime,
         val emissionDate: LocalDateTime,
+        val type: String,
+        val statusExam: StatusExamEnum
 //        val data: Map<String, String>,
 
         @ManyToOne
