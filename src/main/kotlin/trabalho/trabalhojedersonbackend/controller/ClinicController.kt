@@ -10,10 +10,11 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("/clinic")
-class ClinicController(private val clinicService: ClinicService, val clinicRepository: ClinicRepository) {
+class ClinicController(private val clinicService: ClinicService, private val clinicRepository: ClinicRepository) {
 
     @GetMapping()
     fun findAllClinics() = clinicRepository.findAll()
+
 
     @GetMapping("/{id}")
     fun getClinicById(@PathVariable(value = "id") id: Long): ResponseEntity<Clinic> {
