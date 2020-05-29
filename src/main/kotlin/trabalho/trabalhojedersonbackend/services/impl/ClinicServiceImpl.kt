@@ -1,20 +1,15 @@
 package trabalho.trabalhojedersonbackend.services.impl
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import trabalho.trabalhojedersonbackend.model.Clinic
 import trabalho.trabalhojedersonbackend.repositories.ClinicRepository
 import trabalho.trabalhojedersonbackend.services.ClinicService
+import java.util.*
 
 @Service
-class ClinicServiceImpl() : ClinicService {
+class ClinicServiceImpl(val clinicRepository: ClinicRepository) : ClinicService {
 
-    override fun findById(id: Long) {
-        TODO("Not yet implemented")
-    }
+    override fun findById(id: Long): Optional<Clinic> = clinicRepository.findById(id)
 
-    override fun persistir(clinic: Clinic) {
-        TODO("Not yet implemented")
-    }
-
+    override fun persistence(clinic: Clinic): Clinic = clinicRepository.save(clinic)
 }

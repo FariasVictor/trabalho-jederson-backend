@@ -10,12 +10,10 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("/clinic")
-class ClinicController(private val clinicRepository: ClinicRepository, private val clinicService: ClinicService) {
+class ClinicController(private val clinicService: ClinicService, val clinicRepository: ClinicRepository) {
 
     @GetMapping()
-    fun getAllClinics(): List<Clinic> =
-            clinicRepository.findAll()
-
+    fun findAllClinics() = clinicRepository.findAll()
 
     @GetMapping("/{id}")
     fun getClinicById(@PathVariable(value = "id") id: Long): ResponseEntity<Clinic> {
@@ -31,9 +29,9 @@ class ClinicController(private val clinicRepository: ClinicRepository, private v
 
     @DeleteMapping("/delete/{id}")
     fun deleteClinicById(@PathVariable(value = "id") id: Long): ResponseEntity<Void> {
-       return clinicRepository.findById(id).map { clinic ->
+        return clinicRepository.findById(id).map { clinic ->
             clinicRepository.delete(clinic)
             ResponseEntity<Void>(HttpStatus.OK)
-    }.orElse(ResponseEntity.notFound().build())
-
+        }.orElse(ResponseEntity.notFound().build())
+    }
 }

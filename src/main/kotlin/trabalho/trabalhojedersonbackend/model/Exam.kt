@@ -1,6 +1,6 @@
 package trabalho.trabalhojedersonbackend.model
 
-import trabalho.trabalhojedersonbackend.enums.StatusEnum
+import trabalho.trabalhojedersonbackend.enums.StatusExamEnum
 import java.time.LocalDateTime
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -14,7 +14,7 @@ class Exam(
         val requestDate: LocalDateTime,
         val emissionDate: LocalDateTime,
         val type: String,
-        val status: StatusEnum
+        val statusExam: StatusExamEnum
 ) {
 
 }
