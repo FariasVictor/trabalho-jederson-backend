@@ -1,7 +1,7 @@
 package trabalho.trabalhojedersonbackend.model
 
 import org.hibernate.annotations.CreationTimestamp
-import trabalho.trabalhojedersonbackend.enums.StatusEnum
+import trabalho.trabalhojedersonbackend.enums.ExamStatusEnum
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -24,6 +24,6 @@ class Exam(
         val clinic: Clinic,
 
         @Enumerated(EnumType.STRING)
-        val status: StatusEnum
+        val examStatus: ExamStatusEnum
 ) {
 }
