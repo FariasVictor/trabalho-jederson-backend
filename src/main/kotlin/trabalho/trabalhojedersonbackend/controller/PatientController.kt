@@ -8,11 +8,11 @@ import trabalho.trabalhojedersonbackend.model.Patient
 import trabalho.trabalhojedersonbackend.services.impl.PatientServiceImpl
 
 @RestController
-@RequestMapping("/patient")
+@RequestMapping("/patients")
 class PatientController(val patientService: PatientServiceImpl) {
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long): Patient {
+    fun findById(@PathVariable id: Long): Patient? {
         return patientService.findById(id)
     }
 
