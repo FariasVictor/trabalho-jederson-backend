@@ -9,11 +9,14 @@ import javax.persistence.*
 class Exam(
         @Id @GeneratedValue(strategy = GenerationType.AUTO)
         val id: Long,
+
         @CreationTimestamp
         val requestDate: LocalDateTime,
         val emissionDate: LocalDateTime,
         val type: String,
-        val statusExam: StatusExamEnum
+
+        @Enumerated(EnumType.STRING)
+        val statusExam: ExamStatusEnum,
 //        val data: Map<String, String>,
 
         @ManyToOne
