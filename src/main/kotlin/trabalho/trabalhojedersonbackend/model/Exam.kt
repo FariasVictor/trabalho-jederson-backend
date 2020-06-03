@@ -17,6 +17,8 @@ class Exam(
 
         @Enumerated(EnumType.STRING)
         val statusExam: ExamStatusEnum,
+
+        val report: String,
 //        val data: Map<String, String>,
 
         @ManyToOne
