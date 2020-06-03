@@ -1,7 +1,7 @@
 package trabalho.trabalhojedersonbackend.enums
 
 enum class ExamStatusEnum {
-    EXAME_SOLICITADO,
-    EXAME_CONCLUIDO,
-    EXAME_EXAMINADO
+    EXAME_EM_ANDAMENTO, //Clinica e paciente
+    EXAME_CONCLUIDO,    //Médico e paciente
+    EXAME_ANALISADO     //Só paciente
 }
