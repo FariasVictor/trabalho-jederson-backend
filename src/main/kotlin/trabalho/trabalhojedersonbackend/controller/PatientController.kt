@@ -12,12 +12,9 @@ import trabalho.trabalhojedersonbackend.services.impl.PatientServiceImpl
 class PatientController(val patientService: PatientServiceImpl) {
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long): Patient? {
-        return patientService.findById(id)
-    }
+    fun findById(@PathVariable id: Long): Patient? = patientService.findById(id)
 
     @GetMapping()
-    fun findAll(): List<Patient> {
-        return patientService.findAll();
-    }
+    fun findAll(): List<Patient> = patientService.findAll()
+
 }
