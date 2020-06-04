@@ -19,11 +19,4 @@ class PatientServiceImpl(val patientRepository: PatientRepository) : PatientServ
         TODO("Not yet implemented")
     }
 
-
-//    override fun findById(id: Long):Patient {
-//    }
-//
-//    override fun findAll():List<Patient>{
-//    }
-
 }
