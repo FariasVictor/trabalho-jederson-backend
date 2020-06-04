@@ -17,7 +17,7 @@ class Order(
         val examType: String,
 
         @Enumerated(EnumType.STRING)
-        val status: OrderStatusEnum,
+        var status: OrderStatusEnum,
 
         @OneToOne
         val patient: Patient,
