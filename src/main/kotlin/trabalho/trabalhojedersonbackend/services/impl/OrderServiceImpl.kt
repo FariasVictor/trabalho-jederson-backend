@@ -2,7 +2,7 @@ package trabalho.trabalhojedersonbackend.services.impl
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import trabalho.trabalhojedersonbackend.OrderAlreadyAnsweredException
+import trabalho.trabalhojedersonbackend.exceptions.OrderAlreadyAnsweredException
 import trabalho.trabalhojedersonbackend.enums.OrderStatusEnum
 import trabalho.trabalhojedersonbackend.model.Order
 import trabalho.trabalhojedersonbackend.repositories.OrderRepository
