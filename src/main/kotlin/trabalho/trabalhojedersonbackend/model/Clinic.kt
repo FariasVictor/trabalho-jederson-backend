@@ -3,7 +3,7 @@ package trabalho.trabalhojedersonbackend.model
 import javax.persistence.*
 
 @Entity
-class Clinic(
+data class Clinic(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
         val id: Long = -1,
