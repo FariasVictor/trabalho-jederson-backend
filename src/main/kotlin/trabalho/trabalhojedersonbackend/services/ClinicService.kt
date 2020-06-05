@@ -10,6 +10,6 @@ interface ClinicService {
 
     fun save(clinic: Clinic): Clinic
 
-    fun deleteById(id: Long): Clinic?
+    fun deleteById(id: Long)
 
 }
