@@ -1,8 +1,11 @@
 package trabalho.trabalhojedersonbackend.model
 
 import org.hibernate.annotations.CreationTimestamp
+
 import trabalho.trabalhojedersonbackend.enums.StatusExamEnum
+
 import java.time.LocalDateTime
+
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -15,10 +18,12 @@ import javax.persistence.EnumType
 data class Exam(
         @Id @GeneratedValue(strategy = GenerationType.AUTO)
         val id: Long,
+
         @CreationTimestamp
         val requestDate: LocalDateTime,
         val emissionDate: LocalDateTime,
         val type: String,
+
         val statusExam: StatusExamEnum,
 //        val data: Map<String, String>,
 
