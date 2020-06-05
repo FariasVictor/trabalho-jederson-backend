@@ -12,7 +12,7 @@ import javax.persistence.Enumerated
 import javax.persistence.EnumType
 
 @Entity
-class Exam(
+data class Exam(
         @Id @GeneratedValue(strategy = GenerationType.AUTO)
         val id: Long,
         @CreationTimestamp
