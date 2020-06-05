@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-class Patient(
+data class Patient(
 
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
