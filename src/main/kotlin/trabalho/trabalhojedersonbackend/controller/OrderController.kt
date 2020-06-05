@@ -1,13 +1,10 @@
 package trabalho.trabalhojedersonbackend.controller
 
-import arrow.core.rightIfNotNull
-import io.kotlintest.matchers.types.shouldNotBeNull
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import trabalho.trabalhojedersonbackend.enums.OrderStatusEnum
 import trabalho.trabalhojedersonbackend.model.Order
-import trabalho.trabalhojedersonbackend.model.OrderRequest
 import trabalho.trabalhojedersonbackend.services.OrderService
 import java.net.URI
 
