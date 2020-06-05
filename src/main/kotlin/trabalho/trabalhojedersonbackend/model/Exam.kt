@@ -1,12 +1,21 @@
 package trabalho.trabalhojedersonbackend.model
 
 import org.hibernate.annotations.CreationTimestamp
+
 import trabalho.trabalhojedersonbackend.enums.ExamStatusEnum
+
 import java.time.LocalDateTime
-import javax.persistence.*
+
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.ManyToOne
+import javax.persistence.Enumerated
+import javax.persistence.EnumType
 
 @Entity
-class Exam(
+data class Exam(
         @Id @GeneratedValue(strategy = GenerationType.AUTO)
         val id: Long,
 
@@ -15,10 +24,7 @@ class Exam(
         val emissionDate: LocalDateTime,
         val type: String,
 
-        @Enumerated(EnumType.STRING)
         val statusExam: ExamStatusEnum,
-
-        val report: String,
 //        val data: Map<String, String>,
 
         @ManyToOne
@@ -31,6 +37,5 @@ class Exam(
         val clinic: Clinic,
 
         @Enumerated(EnumType.STRING)
-        val examStatus: ExamStatusEnum
-) {
+        val status: ExamStatusEnum) {
 }

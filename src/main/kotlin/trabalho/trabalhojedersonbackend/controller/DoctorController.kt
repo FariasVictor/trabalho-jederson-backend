@@ -9,42 +9,41 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.DeleteMapping
-import trabalho.trabalhojedersonbackend.model.Clinic
-import trabalho.trabalhojedersonbackend.services.ClinicService
+import trabalho.trabalhojedersonbackend.model.Doctor
+import trabalho.trabalhojedersonbackend.services.DoctorService
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("/clinic")
-class ClinicController(private val clinicService: ClinicService) {
+@RequestMapping("/doctor")
+class DoctorController(private val doctorService: DoctorService) {
 
     @GetMapping()
-    fun findAllClinics() = clinicService.findAll()
-
+    fun findAllDoctors() = doctorService.findAll()
 
     @GetMapping("/{id}")
-    fun findClinicById(@PathVariable(value = "id") id: Long): ResponseEntity<Clinic> {
-        return clinicService.findById(id)?.let {
+    fun findDoctorById(@PathVariable(value = "id") id: Long): ResponseEntity<Doctor> {
+        return doctorService.findById(id)?.let {
             ResponseEntity.ok(it)
-        }?:ResponseEntity.notFound().build()
+        }?: ResponseEntity.notFound().build()
     }
 
     @PostMapping("/save")
-    fun createClinic(@Valid @RequestBody clinic: Clinic): ResponseEntity<Clinic> {
-        return clinicService.save(clinic).let {
+    fun createDoctor(@Valid @RequestBody doctor: Doctor): ResponseEntity<Doctor> {
+        return doctorService.save(doctor).let {
             ResponseEntity.ok(it)
         }
     }
 
     @PatchMapping
-    fun updateClinic(@Valid @RequestBody clinic: Clinic): ResponseEntity<Clinic>? {
-        return clinicService.save(clinic).let {
+    fun updateDoctor(@Valid @RequestBody doctor: Doctor): ResponseEntity<Doctor>? {
+        return doctorService.save(doctor).let {
             ResponseEntity.ok(it)
         }
     }
 
     @DeleteMapping("/{id}")
-    fun deleteClinicById(@PathVariable(value = "id") id: Long) {
-        return clinicService.deleteById(id).let {
+    fun deleteDoctorById(@PathVariable(value = "id") id: Long) {
+        return doctorService.deleteById(id).let {
             ResponseEntity.ok()
         }
     }

@@ -1,15 +1,19 @@
 package trabalho.trabalhojedersonbackend.services.impl
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import trabalho.trabalhojedersonbackend.model.Clinic
 import trabalho.trabalhojedersonbackend.repositories.ClinicRepository
 import trabalho.trabalhojedersonbackend.services.ClinicService
-import java.util.*
 
 @Service
-class ClinicServiceImpl(val clinicRepository: ClinicRepository) : ClinicService {
+class ClinicServiceImpl(val clinicRepository: ClinicRepository, val clinic: Clinic) : ClinicService {
 
-    override fun findById(id: Long): Optional<Clinic> = clinicRepository.findById(id)
+    override fun findAll(): List<Clinic>? = clinicRepository.findAll()
 
-    override fun persistence(clinic: Clinic): Clinic = clinicRepository.save(clinic)
+    override fun findById(id: Long): Clinic? = clinicRepository.findByIdOrNull(id)
+
+    override fun save(clinic: Clinic) = clinicRepository.save(clinic)
+
+    override fun deleteById(id: Long) = clinicRepository.deleteById(id)
 }
