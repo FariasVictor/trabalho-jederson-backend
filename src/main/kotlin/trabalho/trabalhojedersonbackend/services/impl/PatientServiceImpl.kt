@@ -15,8 +15,6 @@ class PatientServiceImpl(val patientRepository: PatientRepository) : PatientServ
 
     override fun findAll(): List<Patient> = patientRepository.findAll()
 
-    override fun changeFlag(newFlag: ExamStatusEnum) {
-        TODO("Not yet implemented")
-    }
+    override fun delete(id: Long) = patientRepository.deleteById(id);
 
 }
