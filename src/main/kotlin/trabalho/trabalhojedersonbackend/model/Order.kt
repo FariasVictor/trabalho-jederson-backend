@@ -17,16 +17,16 @@ class Order(
         val examType: String,
 
         @Enumerated(EnumType.STRING)
-        val status: OrderStatusEnum,
+        var status: OrderStatusEnum?,
 
         @OneToOne
-        val patient: Patient,
+        val patient: Patient?,
 
         @OneToOne
-        val doctor: Doctor,
+        val doctor: Doctor?,
 
         @OneToOne
-        val clinic: Clinic,
+        val clinic: Clinic?,
 
         @CreationTimestamp
         val creationDate: LocalDateTime,

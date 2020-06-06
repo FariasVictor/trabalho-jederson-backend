@@ -2,7 +2,7 @@ package trabalho.trabalhojedersonbackend.model
 
 import org.hibernate.validator.constraints.br.CPF
 import org.springframework.format.annotation.DateTimeFormat
-import java.time.LocalDateTime
+import java.time.LocalDate
 import javax.persistence.*
 
 @Entity
@@ -10,9 +10,8 @@ data class Patient(
 
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: Long,
+        var id: Long,
 
-        @CPF
         @Column(length=11, nullable = false)
         val cpf: String,
 
@@ -22,14 +21,13 @@ data class Patient(
         @Column(length = 11)
         val phone: String,
 
-        @DateTimeFormat(style = "dd/mm/yyyy")
-        val birthDate: LocalDateTime,
+        val birthDate: LocalDate,
 
         @Column(nullable = false)
         val insuranceNumber: String?,
 
         @OneToOne(cascade = [CascadeType.ALL])
-        val address: Address
+        val address: Address?
 
 ) : Identifiable(id, name, phone, address) {
 

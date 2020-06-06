@@ -2,7 +2,7 @@ package trabalho.trabalhojedersonbackend.model
 
 import org.hibernate.annotations.CreationTimestamp
 
-import trabalho.trabalhojedersonbackend.enums.StatusExamEnum
+import trabalho.trabalhojedersonbackend.enums.ExamStatusEnum
 
 import java.time.LocalDateTime
 
@@ -24,18 +24,18 @@ data class Exam(
         val emissionDate: LocalDateTime,
         val type: String,
 
-        val statusExam: StatusExamEnum,
+        val statusExam: ExamStatusEnum,
 //        val data: Map<String, String>,
 
         @ManyToOne
-        val patient: Patient,
+        val patient: Patient?,
 
         @ManyToOne
-        val doctor: Doctor,
+        val doctor: Doctor?,
 
         @ManyToOne
-        val clinic: Clinic,
+        val clinic: Clinic?,
 
         @Enumerated(EnumType.STRING)
-        val status: StatusExamEnum) {
+        val status: ExamStatusEnum) {
 }

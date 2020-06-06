@@ -7,6 +7,7 @@ import trabalho.trabalhojedersonbackend.model.Clinic
 import trabalho.trabalhojedersonbackend.model.Patient
 import trabalho.trabalhojedersonbackend.repositories.PatientRepository
 import trabalho.trabalhojedersonbackend.services.PatientService
+import javax.persistence.EntityNotFoundException
 
 @Service
 class PatientServiceImpl(val patientRepository: PatientRepository) : PatientService {
@@ -15,15 +16,18 @@ class PatientServiceImpl(val patientRepository: PatientRepository) : PatientServ
 
     override fun findAll(): List<Patient> = patientRepository.findAll()
 
-    override fun changeFlag(newFlag: ExamStatusEnum) {
-        TODO("Not yet implemented")
+    override fun create(patient: Patient): Patient = patientRepository.save(patient)
+
+    override fun update(id: Long, patient: Patient) {
+        patientRepository.findByIdOrNull(id)?.let {
+            patient.id = it.id
+            patientRepository.save(patient)
+        } ?: throw EntityNotFoundException("O id informado não foi encontrado")
     }
 
-
-//    override fun findById(id: Long):Patient {
-//    }
-//
-//    override fun findAll():List<Patient>{
-//    }
-
+    override fun delete(id: Long) {
+        patientRepository.findByIdOrNull(id)?.let {
+            patientRepository.deleteById(id);
+        } ?: throw EntityNotFoundException("O id informado não foi encontrado")
+    }
 }
