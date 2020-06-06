@@ -7,7 +7,7 @@ import trabalho.trabalhojedersonbackend.repositories.ExamRepository
 import trabalho.trabalhojedersonbackend.services.ExamService
 
 @Service
-class ExamServiceImpl(val examRepository: ExamRepository, val exam: Exam) : ExamService {
+class ExamServiceImpl(val examRepository: ExamRepository) : ExamService {
 
     override fun findAll(): List<Exam>? = examRepository.findAll()
 

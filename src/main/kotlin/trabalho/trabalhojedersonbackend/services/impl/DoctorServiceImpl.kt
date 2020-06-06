@@ -7,7 +7,7 @@ import trabalho.trabalhojedersonbackend.repositories.DoctorRepository
 import trabalho.trabalhojedersonbackend.services.DoctorService
 
 @Service
-class DoctorServiceImpl(val doctorRepository: DoctorRepository, val doctor: Doctor) : DoctorService {
+class DoctorServiceImpl(val doctorRepository: DoctorRepository) : DoctorService {
 
     override fun findAll(): List<Doctor>? = doctorRepository.findAll()
 

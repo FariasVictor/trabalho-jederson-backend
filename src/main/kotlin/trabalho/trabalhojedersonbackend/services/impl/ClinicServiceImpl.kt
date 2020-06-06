@@ -7,7 +7,7 @@ import trabalho.trabalhojedersonbackend.repositories.ClinicRepository
 import trabalho.trabalhojedersonbackend.services.ClinicService
 
 @Service
-class ClinicServiceImpl(val clinicRepository: ClinicRepository, val clinic: Clinic) : ClinicService {
+class ClinicServiceImpl(val clinicRepository: ClinicRepository) : ClinicService {
 
     override fun findAll(): List<Clinic>? = clinicRepository.findAll()
 
