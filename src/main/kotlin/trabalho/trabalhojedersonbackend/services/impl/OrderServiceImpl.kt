@@ -27,6 +27,7 @@ class OrderServiceImpl(val orderRepository: OrderRepository) : OrderService {
                 throw OrderAlreadyAnsweredException()
             }
             it.status = newStatusEnum
+            orderRepository.save(it)
         } ?: throw EntityNotFoundException()
     }
 }
