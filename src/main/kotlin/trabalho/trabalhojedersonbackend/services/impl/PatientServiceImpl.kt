@@ -18,6 +18,12 @@ class PatientServiceImpl(val patientRepository: PatientRepository) : PatientServ
 
     override fun create(patient: Patient): Patient = patientRepository.save(patient)
 
+    override fun update(id: Long, patient: Patient) {
+        patientRepository.findByIdOrNull(id)?.let {
+            patient.id = it.id
+            patientRepository.save(patient)
+        } ?: throw EntityNotFoundException("O id informado não foi encontrado")
+    }
 
     override fun delete(id: Long) {
         patientRepository.findByIdOrNull(id)?.let {

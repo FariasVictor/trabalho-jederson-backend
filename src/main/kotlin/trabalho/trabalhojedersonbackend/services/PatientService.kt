@@ -11,5 +11,7 @@ interface PatientService {
 
     fun create(patient: Patient): Patient
 
+    fun update(id: Long, patient: Patient)
+
     fun delete(id: Long)
 }

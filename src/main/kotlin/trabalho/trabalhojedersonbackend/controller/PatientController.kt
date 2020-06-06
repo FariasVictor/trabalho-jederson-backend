@@ -7,6 +7,7 @@ import trabalho.trabalhojedersonbackend.model.Patient
 import trabalho.trabalhojedersonbackend.services.impl.PatientServiceImpl
 import java.net.URI
 import javax.persistence.EntityNotFoundException
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/patients")
@@ -22,9 +23,19 @@ class PatientController(val patientService: PatientServiceImpl) {
 
     @PostMapping()
     fun create(@RequestBody patient: Patient): ResponseEntity<Patient> {
-        val id = patientService.create(patient)
-        val location: URI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/id").build(id)
+        val savedPatient = patientService.create(patient)
+        val location: URI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").build(savedPatient.id)
         return ResponseEntity.created(location).build()
+    }
+
+    @PutMapping("/{id}")
+    fun update(@PathVariable("id") id: Long, @RequestBody patient: Patient): ResponseEntity<Patient>{
+        return try {
+            patientService.update(id,patient)
+            ResponseEntity.noContent().build()
+        } catch (ex: EntityNotFoundException) {
+            ResponseEntity.notFound().build()
+        }
     }
 
     @DeleteMapping("/{id}")
