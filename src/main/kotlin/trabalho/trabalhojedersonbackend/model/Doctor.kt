@@ -11,7 +11,7 @@ data class Doctor(
         val phone: String,
 
         @OneToOne(cascade = [CascadeType.ALL])
-        val address: Address,
+        val address: Address?,
 
         val crm: String
 ) : Identifiable(id, name, phone, address) {

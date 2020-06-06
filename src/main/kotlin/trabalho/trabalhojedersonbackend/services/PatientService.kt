@@ -9,5 +9,7 @@ interface PatientService {
 
     fun findAll(): List<Patient>
 
-    fun changeFlag(newFlag:ExamStatusEnum)
+    fun create(patient: Patient): Patient
+
+    fun delete(id: Long)
 }

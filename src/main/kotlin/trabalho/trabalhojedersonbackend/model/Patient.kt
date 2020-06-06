@@ -29,7 +29,7 @@ data class Patient(
         val insuranceNumber: String?,
 
         @OneToOne(cascade = [CascadeType.ALL])
-        val address: Address
+        val address: Address?
 
 ) : Identifiable(id, name, phone, address) {
 
