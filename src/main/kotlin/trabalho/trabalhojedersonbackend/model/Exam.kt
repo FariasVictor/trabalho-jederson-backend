@@ -28,13 +28,13 @@ data class Exam(
 //        val data: Map<String, String>,
 
         @ManyToOne
-        val patient: Patient,
+        val patient: Patient?,
 
         @ManyToOne
-        val doctor: Doctor,
+        val doctor: Doctor?,
 
         @ManyToOne
-        val clinic: Clinic,
+        val clinic: Clinic?,
 
         @Enumerated(EnumType.STRING)
         val status: ExamStatusEnum) {

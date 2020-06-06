@@ -10,7 +10,7 @@ data class Clinic(
         val name: String,
         val phone: String,
         @OneToOne(cascade = [CascadeType.ALL])
-        val address: Address,
+        val address: Address?,
         val cnpj: String
 ) :Identifiable(id, name, phone, address) {
 
