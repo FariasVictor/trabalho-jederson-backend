@@ -2,8 +2,11 @@ package trabalho.trabalhojedersonbackend.controller
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import trabalho.trabalhojedersonbackend.model.Patient
 import trabalho.trabalhojedersonbackend.services.impl.PatientServiceImpl
+import java.net.URI
+import javax.persistence.EntityNotFoundException
 
 @RestController
 @RequestMapping("/patients")
@@ -17,7 +20,21 @@ class PatientController(val patientService: PatientServiceImpl) {
     @GetMapping()
     fun findAll(): List<Patient> = patientService.findAll()
 
+    @PostMapping()
+    fun create(@RequestBody patient: Patient): ResponseEntity<Patient> {
+        val id = patientService.create(patient)
+        val location: URI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/id").build(id)
+        return ResponseEntity.created(location).build()
+    }
+
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable("id") id: Long) = patientService.delete(id)
+    fun delete(@PathVariable("id") id: Long): ResponseEntity<Any> {
+        return try {
+            patientService.delete(id)
+            ResponseEntity.noContent().build()
+        } catch (ex: EntityNotFoundException) {
+            ResponseEntity.notFound().build()
+        }
+    }
 
 }

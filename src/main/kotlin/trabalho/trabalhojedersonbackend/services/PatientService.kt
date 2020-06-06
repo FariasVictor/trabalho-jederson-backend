@@ -9,5 +9,7 @@ interface PatientService {
 
     fun findAll(): List<Patient>
 
-    fun delete(id:Long)
+    fun create(patient: Patient): Patient
+
+    fun delete(id: Long)
 }
