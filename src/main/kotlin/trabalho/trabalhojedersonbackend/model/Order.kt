@@ -29,10 +29,10 @@ class Order(
         val clinic: Clinic?,
 
         @CreationTimestamp
-        val creationDate: LocalDateTime,
+        val creationDate: LocalDateTime?,
 
         @UpdateTimestamp
-        val statusChanged: LocalDateTime
+        val statusChanged: LocalDateTime?
 
 ) {
 }
