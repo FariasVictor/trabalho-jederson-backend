@@ -20,12 +20,12 @@ data class Exam(
         val id: Long,
 
         @CreationTimestamp
-        val requestDate: LocalDateTime,
-        val emissionDate: LocalDateTime,
+        val requestDate: LocalDateTime?,
+        val emissionDate: LocalDateTime?,
         val type: String,
 
-        val statusExam: ExamStatusEnum,
-//        val data: Map<String, String>,
+        @Enumerated(EnumType.STRING)
+        val status: ExamStatusEnum,
 
         @ManyToOne
         val patient: Patient?,
@@ -34,8 +34,6 @@ data class Exam(
         val doctor: Doctor?,
 
         @ManyToOne
-        val clinic: Clinic?,
-
-        @Enumerated(EnumType.STRING)
-        val status: ExamStatusEnum) {
+        val clinic: Clinic?){
+        constructor(requestDate: LocalDateTime?, emissionDate: LocalDateTime?, type: String, status: ExamStatusEnum, patient: Patient?, doctor: Doctor?, clinic: Clinic?) : this()
 }
