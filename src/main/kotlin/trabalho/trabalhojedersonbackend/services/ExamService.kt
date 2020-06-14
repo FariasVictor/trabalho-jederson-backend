@@ -11,9 +11,11 @@ interface ExamService {
 
     fun findFiltered(name: String?, status: ExamStatusEnum?): List<Exam>?
 
+    fun findPatientExamsFiltered(patientId:Long, type: String?, status: ExamStatusEnum?): List<Exam>?
+
     fun save(exam: Exam): Exam?
 
     fun deleteById(id: Long)
 
-    fun update(exam: Exam): Exam
+    fun update(id: Long): Exam
 }

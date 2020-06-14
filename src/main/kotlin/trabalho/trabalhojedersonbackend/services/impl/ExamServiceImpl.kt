@@ -9,6 +9,7 @@ import trabalho.trabalhojedersonbackend.model.Exam
 import trabalho.trabalhojedersonbackend.repositories.ExamRepository
 import trabalho.trabalhojedersonbackend.services.ExamService
 import java.time.LocalDateTime
+import javax.persistence.EntityNotFoundException
 
 @Service
 class ExamServiceImpl(val examRepository: ExamRepository) : ExamService {
@@ -26,22 +27,30 @@ class ExamServiceImpl(val examRepository: ExamRepository) : ExamService {
         else examRepository.findByStatus(status)
     }
 
+    //patient + status tá funcionando
+    override fun findPatientExamsFiltered(patientId: Long, type: String?, status: ExamStatusEnum?): List<Exam>? {
+        return examRepository.findByStatusAndPatientId(status!!,patientId)
+    }
+
+
     override fun save(exam: Exam): Exam? {
         exam.status = ExamStatusEnum.EXAME_EM_ANDAMENTO
         return examRepository.save(exam)
     }
 
     //NAO TESTADO, N FAÇO IDEIA SE TÁ FUNCIONANDO CERTO, NA MINHA CABEÇA RODOU KKKK
-    override fun update(exam: Exam): Exam {
-        if (exam.status == (ExamStatusEnum.EXAME_EM_ANDAMENTO)) {
-            exam.status = ExamStatusEnum.EXAME_CONCLUIDO
-            exam.emissionDate = LocalDateTime.now()
-            return examRepository.save(exam)
-        } else if (exam.status == (ExamStatusEnum.EXAME_CONCLUIDO)) {
-            exam.status = ExamStatusEnum.EXAME_ANALISADO
-            return examRepository.save(exam)
-        }
-        throw ExamAlreadyAnalisedException()
+    override fun update(id: Long): Exam {
+        examRepository.findByIdOrNull(id)?.let { exam ->
+            if (exam.status == (ExamStatusEnum.EXAME_EM_ANDAMENTO)) {
+                exam.status = ExamStatusEnum.EXAME_CONCLUIDO
+                exam.emissionDate = LocalDateTime.now()
+                return examRepository.save(exam)
+            } else if (exam.status == (ExamStatusEnum.EXAME_CONCLUIDO)) {
+                exam.status = ExamStatusEnum.EXAME_ANALISADO
+                return examRepository.save(exam)
+            }
+            throw ExamAlreadyAnalisedException()
+        } ?: throw EntityNotFoundException()
     }
 
     override fun deleteById(id: Long) = examRepository.deleteById(id)

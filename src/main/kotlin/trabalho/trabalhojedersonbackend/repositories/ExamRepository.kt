@@ -12,6 +12,8 @@ public interface ExamRepository : JpaRepository<Exam, Long> {
 
     fun findByStatus(status: ExamStatusEnum): List<Exam>
 
+    fun findByStatusAndPatientId(status: ExamStatusEnum,patientId: Long): List<Exam>
+
 //    fun findByNameAndStatus(name: String,status: String): Exam
 
 }
