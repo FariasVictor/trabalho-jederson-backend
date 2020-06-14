@@ -19,9 +19,8 @@ data class Exam(
         @Id @GeneratedValue(strategy = GenerationType.AUTO)
         val id: Long?,
 
-        @CreationTimestamp
-        val requestDate: LocalDateTime?,
-        var emissionDate: LocalDateTime?,
+        var examCompletedDate: LocalDateTime?,
+
         val type: String,
 
         @Enumerated(EnumType.STRING)
@@ -35,13 +34,12 @@ data class Exam(
 
         @ManyToOne
         val clinic: Clinic?) {
-    constructor(
-            requestDate: LocalDateTime?,
-            emissionDate: LocalDateTime?,
-            type: String,
-            status: ExamStatusEnum,
-            patient: Patient?,
-            doctor: Doctor?,
-            clinic: Clinic?
-    ) : this(null,requestDate, emissionDate, type, status, patient, doctor, clinic)
+//    constructor(
+//            examCompletedDate: LocalDateTime?,
+//            type: String,
+//            status: ExamStatusEnum,
+//            patient: Patient?,
+//            doctor: Doctor?,
+//            clinic: Clinic?
+//    ) : this(null, examCompletedDate, type, status, patient, doctor, clinic)
 }
