@@ -1,15 +1,14 @@
 package trabalho.trabalhojedersonbackend.controller
 
+import io.kotlintest.matchers.numerics.beOdd
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PatchMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
+import trabalho.trabalhojedersonbackend.enums.ExamStatusEnum
+import trabalho.trabalhojedersonbackend.exceptions.BadRequestException
 import trabalho.trabalhojedersonbackend.model.Exam
 import trabalho.trabalhojedersonbackend.services.ExamService
+import java.net.URI
 import javax.validation.Valid
 
 @RestController
@@ -20,21 +19,41 @@ class ExamController(private val examService: ExamService) {
     fun findAllExams() = examService.findAll()
 
     @GetMapping("/{id}")
-    fun findExameById(@Valid @PathVariable(value = "id") id: Long): ResponseEntity<Exam> {
+    fun findExamById(@Valid @PathVariable(value = "id") id: Long): ResponseEntity<Exam> {
         return examService.findById(id)?.let {
             ResponseEntity.ok(it)
-        }?: ResponseEntity.notFound().build()
+        } ?: ResponseEntity.notFound().build()
+    }
+
+    @GetMapping("/filter")
+    fun findExamFiltered(
+            @RequestParam(required = false) name: String?,
+            @RequestParam(required = false) status: ExamStatusEnum?
+    ): ResponseEntity<List<Exam>> {
+        return try {
+            examService.findFiltered(name, status)?.let {
+                ResponseEntity.ok().body(it)
+            } ?: ResponseEntity.notFound().build()
+        } catch (ex: BadRequestException) {
+            ResponseEntity.badRequest().build()
+        }
+    }
+
+    @PostMapping
+    fun create(@RequestBody exam: Exam): ResponseEntity<Exam> {
+        val examCreated = examService.save(exam)
+        val location: URI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").build(examCreated?.id)
+        return ResponseEntity.created(location).body(examCreated)
     }
 
     @PatchMapping
     fun updateExam(@Valid @RequestBody exam: Exam): ResponseEntity<Exam> {
-        return examService.save(exam).let {
+        //tratar exceção de NotFound
+        return examService.update(exam).let {
             ResponseEntity.ok(it)
         }
     }
 
     @DeleteMapping("/{id}")
-    fun deleteExamById(@PathVariable(value = "id") id: Long) {
-        ResponseEntity.ok()
-    }
+    fun deleteExamById(@PathVariable(value = "id") id: Long): ResponseEntity<Any> = ResponseEntity.noContent().build()
 }
