@@ -1,12 +1,10 @@
 package trabalho.trabalhojedersonbackend.controller
 
-import io.kotlintest.matchers.numerics.beOdd
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import trabalho.trabalhojedersonbackend.enums.ExamStatusEnum
-import trabalho.trabalhojedersonbackend.exceptions.BadRequestException
+import trabalho.trabalhojedersonbackend.enums.UserTypeEnum
 import trabalho.trabalhojedersonbackend.exceptions.ExamAlreadyAnalisedException
 import trabalho.trabalhojedersonbackend.model.Exam
 import trabalho.trabalhojedersonbackend.services.ExamService
@@ -28,33 +26,24 @@ class ExamController(private val examService: ExamService) {
         } ?: ResponseEntity.notFound().build()
     }
 
-    @GetMapping("/filter")
-    fun findExamFiltered(
-            @RequestParam(required = false) name: String?,
-            @RequestParam(required = false) status: ExamStatusEnum?
-    ): ResponseEntity<List<Exam>> {
+    @GetMapping("{userType}/{userId}")
+    fun findUserAllExams(@PathVariable userType: UserTypeEnum, @PathVariable userId: Long): ResponseEntity<List<Exam>?> {
         return try {
-            examService.findFiltered(name, status)?.let {
-                ResponseEntity.ok().body(it)
-            } ?: ResponseEntity.notFound().build()
-        } catch (ex: BadRequestException) {
-            ResponseEntity.badRequest().build()
+            ResponseEntity.ok(examService.findUserAllExams(userType, userId))
+        }catch (ex: EntityNotFoundException){
+            ResponseEntity.notFound().build()
         }
     }
 
-    //Não finalizado, só tem por patient+status
-    @GetMapping("{patientId}/filter")
-    fun findPatientExamsFiltered(
-            @PathVariable patientId: Long,
-            @RequestParam(required = false) name: String?,
-            @RequestParam(required = false) status: ExamStatusEnum?
+    @GetMapping("{userType}/{userId}/{status}")
+    fun findExamsByStatus(@PathVariable userType: UserTypeEnum,
+                          @PathVariable userId: Long,
+                          @PathVariable status: ExamStatusEnum
     ): ResponseEntity<List<Exam>> {
         return try {
-            examService.findPatientExamsFiltered(patientId, name, status)?.let {
-                ResponseEntity.ok().body(it)
-            } ?: ResponseEntity.notFound().build()
-        } catch (ex: BadRequestException) {
-            ResponseEntity.badRequest().build()
+            ResponseEntity.ok(examService.findUserExamsByStatus(userType, userId, status))
+        } catch (ex: EntityNotFoundException) {
+            ResponseEntity.notFound().build()
         }
     }
 

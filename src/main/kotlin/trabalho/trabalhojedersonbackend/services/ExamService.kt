@@ -1,6 +1,7 @@
 package trabalho.trabalhojedersonbackend.services
 
 import trabalho.trabalhojedersonbackend.enums.ExamStatusEnum
+import trabalho.trabalhojedersonbackend.enums.UserTypeEnum
 import trabalho.trabalhojedersonbackend.model.Exam
 
 interface ExamService {
@@ -9,9 +10,18 @@ interface ExamService {
 
     fun findById(id: Long): Exam?
 
-    fun findFiltered(name: String?, status: ExamStatusEnum?): List<Exam>?
+    fun findUserAllExams(userType: UserTypeEnum, userId: Long): List<Exam>
+    fun findAllByPatientId(patientId: Long): List<Exam>
+    fun findAllByClinicId(clinicId: Long): List<Exam>
+    fun findAllByDoctorId(doctorId: Long): List<Exam>
 
-    fun findPatientExamsFiltered(patientId:Long, type: String?, status: ExamStatusEnum?): List<Exam>?
+    //Direciona a busca pro tipo de usuário certo(Clinica, paciente ou médico)
+    fun findUserExamsByStatus(userType: UserTypeEnum, userId: Long, status: ExamStatusEnum): List<Exam>
+
+    //Buscar os exames do usuário logado por status
+    fun findPatientExamsByStatus(patientId: Long, status: ExamStatusEnum): List<Exam>
+    fun findClinicExamsByStatus(clinicId: Long, status: ExamStatusEnum): List<Exam>
+    fun findDoctorExamsByStatus(doctorId: Long, status: ExamStatusEnum): List<Exam>
 
     fun save(exam: Exam): Exam?
 
