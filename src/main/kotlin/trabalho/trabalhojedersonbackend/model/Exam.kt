@@ -34,12 +34,5 @@ data class Exam(
 
         @ManyToOne
         val clinic: Clinic?) {
-//    constructor(
-//            examCompletedDate: LocalDateTime?,
-//            type: String,
-//            status: ExamStatusEnum,
-//            patient: Patient?,
-//            doctor: Doctor?,
-//            clinic: Clinic?
-//    ) : this(null, examCompletedDate, type, status, patient, doctor, clinic)
+
 }
