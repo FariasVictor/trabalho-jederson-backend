@@ -11,22 +11,9 @@ import javax.persistence.EntityNotFoundException
 
 @Service
 class AccessServiceImpl(val accessRepository: AccessRepository) : AccessService {
-
     override fun login(username: String, password: String): AccessResponse {
         val access: Access = accessRepository.findByUsernameAndPassword(username, password)
                 ?: throw InvalidAccessDataException()
-        return AccessResponse(access.userType,access.userId)
-    }
-
-    override fun patientRegister() {
-        TODO("Not yet implemented")
-    }
-
-    override fun doctorRegister() {
-        TODO("Not yet implemented")
-    }
-
-    override fun clinicRegister() {
-        TODO("Not yet implemented")
+        return AccessResponse(access.userType, access.userId)
     }
 }
