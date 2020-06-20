@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import trabalho.trabalhojedersonbackend.enums.OrderStatusEnum
+import trabalho.trabalhojedersonbackend.enums.UserTypeEnum
 import trabalho.trabalhojedersonbackend.model.Order
 import trabalho.trabalhojedersonbackend.services.OrderService
 import java.net.URI
@@ -22,6 +23,28 @@ class OrderController(val orderService: OrderService) {
                 ?: ResponseEntity.notFound().build()
     }
 
+    @GetMapping("{userType}/{userId}")
+    fun findOrdersByUser(@PathVariable userType: UserTypeEnum, @PathVariable userId: Long): ResponseEntity<List<Order>> {
+        return try {
+            ResponseEntity.ok(orderService.findAllByUser(userType, userId))
+        } catch (ex: EntityNotFoundException) {
+            ResponseEntity.notFound().build()
+        }
+    }
+
+    @GetMapping("/{userType}/{userId}/{status}")
+    fun findUserOrdersByStatus(
+            @PathVariable userType: UserTypeEnum,
+            @PathVariable userId: Long,
+            @PathVariable status: OrderStatusEnum)
+            : ResponseEntity<List<Order>> {
+        return try {
+            ResponseEntity.ok(orderService.findUserOrdersByStatus(userType,userId,status))
+        }catch (ex: EntityNotFoundException){
+            ResponseEntity.notFound().build()
+        }
+    }
+
     @PostMapping
     fun create(@RequestBody order: Order): ResponseEntity<Any> {
         val id: Long = orderService.create(order)
@@ -34,7 +57,7 @@ class OrderController(val orderService: OrderService) {
         return try {
             orderService.update(id, newStatusEnum)
             ResponseEntity.noContent().build()
-        }catch (ex: EntityNotFoundException){
+        } catch (ex: EntityNotFoundException) {
             ResponseEntity.notFound().build()
         }
     }
