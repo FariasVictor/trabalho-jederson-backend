@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import trabalho.trabalhojedersonbackend.enums.OrderStatusEnum
+import trabalho.trabalhojedersonbackend.enums.UserTypeEnum
 import trabalho.trabalhojedersonbackend.model.Order
 import trabalho.trabalhojedersonbackend.services.OrderService
 import java.net.URI
@@ -20,6 +21,15 @@ class OrderController(val orderService: OrderService) {
     fun findById(@PathVariable id: Long): ResponseEntity<Order> {
         return orderService.findById(id)?.let { ResponseEntity.ok(it) }
                 ?: ResponseEntity.notFound().build()
+    }
+
+    @GetMapping("{userType}/{userId}")
+    fun findOrdersByUser(@PathVariable userType: UserTypeEnum, @PathVariable userId: Long): ResponseEntity<List<Order>>{
+        return try {
+            ResponseEntity.ok(orderService.findAllByUser(userType, userId))
+        }catch (ex: EntityNotFoundException){
+            ResponseEntity.notFound().build()
+        }
     }
 
     @PostMapping

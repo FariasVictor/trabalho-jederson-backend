@@ -4,6 +4,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import trabalho.trabalhojedersonbackend.exceptions.OrderAlreadyAnsweredException
 import trabalho.trabalhojedersonbackend.enums.OrderStatusEnum
+import trabalho.trabalhojedersonbackend.enums.UserTypeEnum
 import trabalho.trabalhojedersonbackend.model.Order
 import trabalho.trabalhojedersonbackend.repositories.OrderRepository
 import trabalho.trabalhojedersonbackend.services.OrderService
@@ -15,6 +16,41 @@ class OrderServiceImpl(val orderRepository: OrderRepository) : OrderService {
     override fun findById(id: Long): Order? = orderRepository.findByIdOrNull(id)
 
     override fun findAll(): List<Order> = orderRepository.findAll()
+
+    override fun findAllByUser(userType: UserTypeEnum, userId: Long): List<Order> {
+        return when (userType) {
+            UserTypeEnum.CLINIC -> {
+                findAllByClinicId(userId)
+            }
+            UserTypeEnum.DOCTOR -> {
+                findAllByDoctorId(userId)
+            }
+            UserTypeEnum.PATIENT -> {
+                findAllByPatientId(userId)
+            }
+        }
+    }
+
+    override fun findAllByPatientId(patientId: Long): List<Order> {
+        return orderRepository.findByPatientId(patientId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
+            else it
+        }
+    }
+
+    override fun findAllByClinicId(clinicId: Long): List<Order> {
+        return orderRepository.findByClinicId(clinicId).let {
+            if(it.isEmpty()) throw EntityNotFoundException()
+            else it
+        }
+    }
+
+    override fun findAllByDoctorId(doctorId: Long): List<Order> {
+        return orderRepository.findByDoctorId(doctorId).let {
+            if(it.isEmpty()) throw EntityNotFoundException()
+            else it
+        }
+    }
 
     override fun create(order: Order): Long {
         order.status = OrderStatusEnum.SOLICITACAO_ABERTA
