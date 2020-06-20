@@ -1,15 +1,11 @@
 package trabalho.trabalhojedersonbackend.model
 
-import io.kotlintest.matchers.string.haveMaxLength
-import io.kotlintest.matchers.string.haveMinLength
-import org.eclipse.jgit.transport.CredentialItem
 import org.hibernate.validator.constraints.Length
 import trabalho.trabalhojedersonbackend.enums.UserTypeEnum
 import javax.persistence.*
-import kotlin.math.min
 
 @Entity
-class Accesses(
+class Access(
         @Enumerated(EnumType.STRING)
         val userType: UserTypeEnum,
 
