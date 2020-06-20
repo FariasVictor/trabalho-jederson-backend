@@ -1,5 +1,6 @@
 package trabalho.trabalhojedersonbackend.services
 
+import trabalho.trabalhojedersonbackend.enums.ExamStatusEnum
 import trabalho.trabalhojedersonbackend.model.Exam
 
 interface ExamService {
@@ -8,7 +9,13 @@ interface ExamService {
 
     fun findById(id: Long): Exam?
 
-    fun save(exam: Exam): Exam
+    fun findFiltered(name: String?, status: ExamStatusEnum?): List<Exam>?
+
+    fun findPatientExamsFiltered(patientId:Long, type: String?, status: ExamStatusEnum?): List<Exam>?
+
+    fun save(exam: Exam): Exam?
 
     fun deleteById(id: Long)
+
+    fun update(id: Long): Exam
 }

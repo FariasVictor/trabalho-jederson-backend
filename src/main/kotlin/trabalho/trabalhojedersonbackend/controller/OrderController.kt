@@ -7,6 +7,7 @@ import trabalho.trabalhojedersonbackend.enums.OrderStatusEnum
 import trabalho.trabalhojedersonbackend.model.Order
 import trabalho.trabalhojedersonbackend.services.OrderService
 import java.net.URI
+import javax.persistence.EntityNotFoundException
 
 @RestController
 @RequestMapping("/orders")
@@ -28,10 +29,14 @@ class OrderController(val orderService: OrderService) {
         return ResponseEntity.created(location).build()
     }
 
-    @PutMapping("/{id}")
-    fun update(@PathVariable("id") id: Long, newStatusEnum: OrderStatusEnum): ResponseEntity<Any> {
-        orderService.update(id, newStatusEnum)
-        return ResponseEntity.noContent().build()
+    @PutMapping("/{id}/{status}")
+    fun update(@PathVariable("id") id: Long, @PathVariable("status") newStatusEnum: OrderStatusEnum): ResponseEntity<Any> {
+        return try {
+            orderService.update(id, newStatusEnum)
+            ResponseEntity.noContent().build()
+        }catch (ex: EntityNotFoundException){
+            ResponseEntity.notFound().build()
+        }
     }
 
 }

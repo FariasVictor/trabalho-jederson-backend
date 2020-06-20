@@ -2,9 +2,14 @@ package trabalho.trabalhojedersonbackend.services.impl;
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service;
+import trabalho.trabalhojedersonbackend.enums.ExamStatusEnum
+import trabalho.trabalhojedersonbackend.exceptions.BadRequestException
+import trabalho.trabalhojedersonbackend.exceptions.ExamAlreadyAnalisedException
 import trabalho.trabalhojedersonbackend.model.Exam
 import trabalho.trabalhojedersonbackend.repositories.ExamRepository
 import trabalho.trabalhojedersonbackend.services.ExamService
+import java.time.LocalDateTime
+import javax.persistence.EntityNotFoundException
 
 @Service
 class ExamServiceImpl(val examRepository: ExamRepository) : ExamService {
@@ -13,7 +18,40 @@ class ExamServiceImpl(val examRepository: ExamRepository) : ExamService {
 
     override fun findById(id: Long): Exam? = examRepository.findByIdOrNull(id)
 
-    override fun save(exam: Exam): Exam = examRepository.save(exam)
+    //TODO BUSCA POR NOME, ACHO QUE TEM BUSCAR PELA PESSOA
+    //POR STATUS TESTEI AQUI E TÁ FUNCIONANDO
+    override fun findFiltered(cpf: String?, status: ExamStatusEnum?): List<Exam>? {
+        return if (/*name.isNullOrBlank() &&*/ status == null) throw BadRequestException("Nome ou status deve ser preenchido")
+//        else if(name!!.isNotBlank() && status!!.isNotBlank()) examRepository.findByNameAndStatus(name, status)
+//        else if (name!!.isNotBlank()) examRepository.findByName(name)
+        else examRepository.findByStatus(status)
+    }
+
+    //patient + status tá funcionando
+    override fun findPatientExamsFiltered(patientId: Long, type: String?, status: ExamStatusEnum?): List<Exam>? {
+        return examRepository.findByStatusAndPatientId(status!!,patientId)
+    }
+
+
+    override fun save(exam: Exam): Exam? {
+        exam.status = ExamStatusEnum.EXAME_EM_ANDAMENTO
+        return examRepository.save(exam)
+    }
+
+    //NAO TESTADO, N FAÇO IDEIA SE TÁ FUNCIONANDO CERTO, NA MINHA CABEÇA RODOU KKKK
+    override fun update(id: Long): Exam {
+        examRepository.findByIdOrNull(id)?.let { exam ->
+            if (exam.status == (ExamStatusEnum.EXAME_EM_ANDAMENTO)) {
+                exam.status = ExamStatusEnum.EXAME_CONCLUIDO
+                exam.examCompletedDate = LocalDateTime.now()
+                return examRepository.save(exam)
+            } else if (exam.status == (ExamStatusEnum.EXAME_CONCLUIDO)) {
+                exam.status = ExamStatusEnum.EXAME_ANALISADO
+                return examRepository.save(exam)
+            }
+            throw ExamAlreadyAnalisedException()
+        } ?: throw EntityNotFoundException()
+    }
 
     override fun deleteById(id: Long) = examRepository.deleteById(id)
 }
