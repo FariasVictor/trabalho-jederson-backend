@@ -34,7 +34,7 @@ class AddressController(private val addressService: AddressService) {
         }
     }
 
-    @PatchMapping
+    @PatchMapping("/{id}")
     fun update(@Valid @RequestBody address: Address): ResponseEntity<Address> {
         return addressService.save(address).let {
             ResponseEntity.ok(it)
