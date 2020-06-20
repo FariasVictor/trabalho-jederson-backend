@@ -24,9 +24,22 @@ class OrderController(val orderService: OrderService) {
     }
 
     @GetMapping("{userType}/{userId}")
-    fun findOrdersByUser(@PathVariable userType: UserTypeEnum, @PathVariable userId: Long): ResponseEntity<List<Order>>{
+    fun findOrdersByUser(@PathVariable userType: UserTypeEnum, @PathVariable userId: Long): ResponseEntity<List<Order>> {
         return try {
             ResponseEntity.ok(orderService.findAllByUser(userType, userId))
+        } catch (ex: EntityNotFoundException) {
+            ResponseEntity.notFound().build()
+        }
+    }
+
+    @GetMapping("/{userType}/{userId}/{status}")
+    fun findUserOrdersByStatus(
+            @PathVariable userType: UserTypeEnum,
+            @PathVariable userId: Long,
+            @PathVariable status: OrderStatusEnum)
+            : ResponseEntity<List<Order>> {
+        return try {
+            ResponseEntity.ok(orderService.findUserOrdersByStatus(userType,userId,status))
         }catch (ex: EntityNotFoundException){
             ResponseEntity.notFound().build()
         }
@@ -44,7 +57,7 @@ class OrderController(val orderService: OrderService) {
         return try {
             orderService.update(id, newStatusEnum)
             ResponseEntity.noContent().build()
-        }catch (ex: EntityNotFoundException){
+        } catch (ex: EntityNotFoundException) {
             ResponseEntity.notFound().build()
         }
     }

@@ -40,14 +40,49 @@ class OrderServiceImpl(val orderRepository: OrderRepository) : OrderService {
 
     override fun findAllByClinicId(clinicId: Long): List<Order> {
         return orderRepository.findByClinicId(clinicId).let {
-            if(it.isEmpty()) throw EntityNotFoundException()
+            if (it.isEmpty()) throw EntityNotFoundException()
             else it
         }
     }
 
     override fun findAllByDoctorId(doctorId: Long): List<Order> {
         return orderRepository.findByDoctorId(doctorId).let {
-            if(it.isEmpty()) throw EntityNotFoundException()
+            if (it.isEmpty()) throw EntityNotFoundException()
+            else it
+        }
+    }
+
+    override fun findUserOrdersByStatus(userType: UserTypeEnum, userId: Long, status: OrderStatusEnum): List<Order> {
+        return when (userType) {
+            UserTypeEnum.CLINIC -> {
+                findClinicOrdersByStatus(userId, status)
+            }
+            UserTypeEnum.DOCTOR -> {
+                findDoctorOrdersByStatus(userId, status)
+            }
+            UserTypeEnum.PATIENT -> {
+                findPatientOrdersByStatus(userId, status)
+            }
+        }
+    }
+
+    override fun findPatientOrdersByStatus(patientId: Long, status: OrderStatusEnum): List<Order> {
+        return orderRepository.findByStatusAndPatientId(status, patientId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
+            else it
+        }
+    }
+
+    override fun findClinicOrdersByStatus(clinicId: Long, status: OrderStatusEnum): List<Order> {
+        return orderRepository.findByStatusAndClinicId(status, clinicId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
+            else it
+        }
+    }
+
+    override fun findDoctorOrdersByStatus(doctorId: Long, status: OrderStatusEnum): List<Order> {
+        return orderRepository.findByStatusAndDoctorId(status, doctorId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
             else it
         }
     }
@@ -59,11 +94,12 @@ class OrderServiceImpl(val orderRepository: OrderRepository) : OrderService {
 
     override fun update(id: Long, newStatusEnum: OrderStatusEnum) {
         orderRepository.findByIdOrNull(id)?.let {
-            if (it.status!=(OrderStatusEnum.SOLICITACAO_ABERTA)) {
+            if (it.status != (OrderStatusEnum.SOLICITACAO_ABERTA)) {
                 throw OrderAlreadyAnsweredException()
             }
             it.status = newStatusEnum
             orderRepository.save(it)
         } ?: throw EntityNotFoundException()
     }
+
 }
