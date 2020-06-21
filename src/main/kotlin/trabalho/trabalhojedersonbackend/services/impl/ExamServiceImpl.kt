@@ -43,14 +43,14 @@ class ExamServiceImpl(val examRepository: ExamRepository) : ExamService {
 
     override fun findAllByClinicId(clinicId: Long): List<Exam> {
         return examRepository.findByClinicId(clinicId).let {
-            if(it.isEmpty()) throw EntityNotFoundException()
+            if (it.isEmpty()) throw EntityNotFoundException()
             else it
         }
     }
 
     override fun findAllByDoctorId(doctorId: Long): List<Exam> {
         return examRepository.findByDoctorId(doctorId).let {
-            if(it.isEmpty()) throw EntityNotFoundException()
+            if (it.isEmpty()) throw EntityNotFoundException()
             else it
         }
     }
@@ -58,13 +58,13 @@ class ExamServiceImpl(val examRepository: ExamRepository) : ExamService {
     override fun findUserExamsByStatus(userType: UserTypeEnum, userId: Long, status: ExamStatusEnum): List<Exam> {
         return when (userType) {
             UserTypeEnum.CLINIC -> {
-                findClinicExamsByStatus(userId,status)
+                findClinicExamsByStatus(userId, status)
             }
             UserTypeEnum.DOCTOR -> {
-                findDoctorExamsByStatus(userId,status)
+                findDoctorExamsByStatus(userId, status)
             }
             UserTypeEnum.PATIENT -> {
-                findPatientExamsByStatus(userId,status)
+                findPatientExamsByStatus(userId, status)
             }
         }
     }
@@ -87,6 +87,32 @@ class ExamServiceImpl(val examRepository: ExamRepository) : ExamService {
         return examRepository.findByStatusAndDoctorId(status, doctorId).let {
             if (it.isEmpty()) throw EntityNotFoundException()
             else it
+        }
+    }
+
+    override fun clinicFindByUser(clinicId: Long, userType: UserTypeEnum, userId: Long): List<Exam> {
+        return when (userType) {
+            UserTypeEnum.PATIENT -> {
+                clinicFindByPatient(clinicId, userId)
+            }
+            UserTypeEnum.DOCTOR -> {
+                clinicFindByDoctor(clinicId, userId)
+            }
+            else -> throw BadRequestException("Tipos permitidos são médico e paciente")
+        }
+    }
+
+    override fun clinicFindByPatient(clinicId: Long, patientId: Long): List<Exam> {
+        return examRepository.findByClinicIdAndPatientId(clinicId, patientId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
+            it
+        }
+    }
+
+    override fun clinicFindByDoctor(clinicId: Long, doctorId: Long): List<Exam> {
+        return examRepository.findByClinicIdAndDoctorId(clinicId, doctorId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
+            it
         }
     }
 
