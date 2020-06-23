@@ -1,10 +1,7 @@
 package trabalho.trabalhojedersonbackend.controller
 
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import trabalho.trabalhojedersonbackend.enums.UserTypeEnum
 import trabalho.trabalhojedersonbackend.exceptions.InvalidAccessDataException
 import trabalho.trabalhojedersonbackend.model.request.AccessRequest
@@ -16,7 +13,7 @@ import javax.validation.Valid
 @RequestMapping("/accesses")
 class AccessController(val accessService: AccessService) {
 
-    @GetMapping
+    @PostMapping
     fun login(@RequestBody @Valid accessRequest: AccessRequest): ResponseEntity<AccessResponse>{
         return try {
             accessService.login(accessRequest.username, accessRequest.password).let {
