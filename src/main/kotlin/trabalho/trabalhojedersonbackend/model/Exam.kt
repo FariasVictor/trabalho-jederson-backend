@@ -17,15 +17,14 @@ import javax.persistence.EnumType
 @Entity
 data class Exam(
         @Id @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: Long,
+        val id: Long?,
 
-        @CreationTimestamp
-        val requestDate: LocalDateTime,
-        val emissionDate: LocalDateTime,
+        var examCompletedDate: LocalDateTime?,
+
         val type: String,
 
-        val statusExam: ExamStatusEnum,
-//        val data: Map<String, String>,
+        @Enumerated(EnumType.STRING)
+        var status: ExamStatusEnum?,
 
         @ManyToOne
         val patient: Patient?,
@@ -34,8 +33,6 @@ data class Exam(
         val doctor: Doctor?,
 
         @ManyToOne
-        val clinic: Clinic?,
+        val clinic: Clinic?) {
 
-        @Enumerated(EnumType.STRING)
-        val status: ExamStatusEnum) {
 }
