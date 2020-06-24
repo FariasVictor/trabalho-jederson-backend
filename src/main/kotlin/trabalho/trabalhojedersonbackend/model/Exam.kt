@@ -27,7 +27,7 @@ data class Exam(
         @Enumerated(EnumType.STRING)
         var status: ExamStatusEnum?,
 
-        @OneToOne
+        @ManyToOne
         val examData: ExamData?,
 
         @ManyToOne
