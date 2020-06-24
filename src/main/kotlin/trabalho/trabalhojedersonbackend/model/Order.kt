@@ -19,14 +19,14 @@ class Order(
         @Enumerated(EnumType.STRING)
         var status: OrderStatusEnum?,
 
-        @OneToOne
-        val patient: Patient?,
+        @ManyToOne
+        val patient: Patient,
 
-        @OneToOne
-        val doctor: Doctor?,
+        @ManyToOne
+        val doctor: Doctor,
 
-        @OneToOne
-        val clinic: Clinic?,
+        @ManyToOne
+        val clinic: Clinic,
 
         @CreationTimestamp
         val creationDate: LocalDateTime?,

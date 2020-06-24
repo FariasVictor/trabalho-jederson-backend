@@ -1,10 +1,13 @@
 package trabalho.trabalhojedersonbackend.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import lombok.NoArgsConstructor
 import org.hibernate.validator.constraints.br.CPF
 import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
 import javax.persistence.*
 
+@NoArgsConstructor
 @Entity
 data class Patient(
 
@@ -24,11 +27,19 @@ data class Patient(
         val birthDate: LocalDate,
 
         @Column(nullable = false)
-        val insuranceNumber: String?,
+        val insuranceNumber: String,
 
         @OneToOne(cascade = [CascadeType.ALL])
-        val address: Address?
+        val address: Address,
 
-) : Identifiable(id, name, phone, address) {
+        @JsonIgnore
+        @OneToMany(mappedBy = "patient", cascade = [CascadeType.ALL])
+        val exams:List<Exam>?,
+
+        @JsonIgnore
+        @OneToMany(mappedBy = "patient", cascade = [CascadeType.ALL])
+        val orders:List<Order>?
+
+) {
 
 }

@@ -17,8 +17,8 @@ class CorsConfig {
     fun corsConfiguration(): FilterRegistrationBean<CorsFilter> {
         val corsConfiguration = CorsConfiguration()
         corsConfiguration.allowCredentials = true
-        corsConfiguration.addAllowedOrigin("")
-        corsConfiguration.addAllowedMethod("")
+        corsConfiguration.addAllowedOrigin("*")
+        corsConfiguration.addAllowedMethod("*")
         corsConfiguration.addAllowedHeader("*")
         corsConfiguration.exposedHeaders = Collections.singletonList("Location")
         val urlBasedCorsConfigurationSource = UrlBasedCorsConfigurationSource()
