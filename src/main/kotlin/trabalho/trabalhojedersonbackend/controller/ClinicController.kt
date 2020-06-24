@@ -36,25 +36,28 @@ class ClinicController(private val clinicService: ClinicService) {
     }
 
     @PatchMapping("/{id}")
-    fun updateClinic(@Valid @RequestBody clinicSend: Clinic,
+    fun updateClinic(@Valid @RequestBody clinic: Clinic,
                      @PathVariable(value = "id") id: Long): ResponseEntity<Clinic>? {
         if(clinicService.findById(id) == null) {
             return ResponseEntity.notFound().build()
         }
 
         return clinicService.save(Clinic(id,
-            clinicSend.name,
-            clinicSend.phone,
-            clinicSend.address,
-            clinicSend.cnpj)).let {
+                clinic.name,
+                clinic.phone,
+                clinic.address,
+                clinic.cnpj)).let {
             ResponseEntity.ok(it)
-            }
+        }
     }
 
     @DeleteMapping("/{id}")
-    fun deleteClinicById(@PathVariable(value = "id") id: Long) {
+    fun deleteClinicById(@PathVariable(value = "id") id: Long): ResponseEntity<Clinic>? {
+        if (clinicService.findById(id) == null) {
+            return ResponseEntity.notFound().build()
+        }
         return clinicService.deleteById(id).let {
-            ResponseEntity.ok()
+            ResponseEntity.noContent().build()
         }
     }
 }

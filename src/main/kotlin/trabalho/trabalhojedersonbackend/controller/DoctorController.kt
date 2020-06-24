@@ -17,7 +17,7 @@ import javax.validation.Valid
 @RequestMapping("/doctor")
 class DoctorController(private val doctorService: DoctorService) {
 
-    @GetMapping()
+    @GetMapping
     fun findAllDoctors() = doctorService.findAll()
 
     @GetMapping("/{id}")
@@ -27,24 +27,35 @@ class DoctorController(private val doctorService: DoctorService) {
         }?: ResponseEntity.notFound().build()
     }
 
-    @PostMapping("/save")
+    @PostMapping
     fun createDoctor(@Valid @RequestBody doctor: Doctor): ResponseEntity<Doctor> {
         return doctorService.save(doctor).let {
             ResponseEntity.ok(it)
         }
     }
 
-    @PatchMapping
-    fun updateDoctor(@Valid @RequestBody doctor: Doctor): ResponseEntity<Doctor>? {
-        return doctorService.save(doctor).let {
+    @PatchMapping("/{id}")
+    fun updateDoctor(@Valid @RequestBody doctor: Doctor,
+                     @PathVariable(value = "id") id: Long): ResponseEntity<Doctor>? {
+        if (doctorService.findById(id) == null) {
+            return ResponseEntity.notFound().build()
+        }
+        return doctorService.save(Doctor(id,
+                doctor.name,
+                doctor.phone,
+                doctor.address,
+                doctor.crm)).let {
             ResponseEntity.ok(it)
         }
     }
 
     @DeleteMapping("/{id}")
-    fun deleteDoctorById(@PathVariable(value = "id") id: Long) {
+    fun deleteDoctorById(@PathVariable(value = "id") id: Long): ResponseEntity<Doctor>? {
+        if (doctorService.findById(id) == null) {
+            return ResponseEntity.notFound().build()
+        }
         return doctorService.deleteById(id).let {
-            ResponseEntity.ok()
+            ResponseEntity.noContent().build()
         }
     }
 }
