@@ -4,14 +4,12 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service;
 import trabalho.trabalhojedersonbackend.enums.ExamStatusEnum
 import trabalho.trabalhojedersonbackend.enums.UserTypeEnum
-import trabalho.trabalhojedersonbackend.exceptions.BadRequestException
 import trabalho.trabalhojedersonbackend.exceptions.ExamAlreadyAnalisedException
 import trabalho.trabalhojedersonbackend.model.Exam
 import trabalho.trabalhojedersonbackend.repositories.ExamRepository
 import trabalho.trabalhojedersonbackend.services.ExamService
 import java.time.LocalDateTime
 import javax.persistence.EntityNotFoundException
-import kotlin.system.exitProcess
 
 @Service
 class ExamServiceImpl(val examRepository: ExamRepository) : ExamService {

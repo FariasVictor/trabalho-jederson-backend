@@ -13,6 +13,7 @@ import javax.persistence.Id
 import javax.persistence.ManyToOne
 import javax.persistence.Enumerated
 import javax.persistence.EnumType
+import javax.persistence.OneToOne
 
 @Entity
 data class Exam(
@@ -25,6 +26,9 @@ data class Exam(
 
         @Enumerated(EnumType.STRING)
         var status: ExamStatusEnum?,
+
+        @ManyToOne
+        val examData: ExamData?,
 
         @ManyToOne
         val patient: Patient?,

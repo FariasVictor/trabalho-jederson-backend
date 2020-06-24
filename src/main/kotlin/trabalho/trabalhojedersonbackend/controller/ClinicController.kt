@@ -17,7 +17,7 @@ import javax.validation.Valid
 @RequestMapping("/clinic")
 class ClinicController(private val clinicService: ClinicService) {
 
-    @GetMapping()
+    @GetMapping
     fun findAllClinics() = clinicService.findAll()
 
 
@@ -28,18 +28,27 @@ class ClinicController(private val clinicService: ClinicService) {
         }?:ResponseEntity.notFound().build()
     }
 
-    @PostMapping("/save")
+    @PostMapping
     fun createClinic(@Valid @RequestBody clinic: Clinic): ResponseEntity<Clinic> {
         return clinicService.save(clinic).let {
             ResponseEntity.ok(it)
         }
     }
 
-    @PatchMapping
-    fun updateClinic(@Valid @RequestBody clinic: Clinic): ResponseEntity<Clinic>? {
-        return clinicService.save(clinic).let {
-            ResponseEntity.ok(it)
+    @PatchMapping("/{id}")
+    fun updateClinic(@Valid @RequestBody clinicSend: Clinic,
+                     @PathVariable(value = "id") id: Long): ResponseEntity<Clinic>? {
+        if(clinicService.findById(id) == null) {
+            return ResponseEntity.notFound().build()
         }
+
+        return clinicService.save(Clinic(id,
+            clinicSend.name,
+            clinicSend.phone,
+            clinicSend.address,
+            clinicSend.cnpj)).let {
+            ResponseEntity.ok(it)
+            }
     }
 
     @DeleteMapping("/{id}")
