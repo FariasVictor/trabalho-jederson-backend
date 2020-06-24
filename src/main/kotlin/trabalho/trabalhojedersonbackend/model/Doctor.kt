@@ -6,7 +6,7 @@ import javax.persistence.*
 data class Doctor(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: Long,
+        val id: Long = -1,
         val name: String,
         val phone: String,
 
