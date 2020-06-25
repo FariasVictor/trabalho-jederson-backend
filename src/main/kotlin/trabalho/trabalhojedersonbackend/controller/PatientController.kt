@@ -4,11 +4,9 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import trabalho.trabalhojedersonbackend.model.Patient
-import trabalho.trabalhojedersonbackend.model.request.PatientRequest
 import trabalho.trabalhojedersonbackend.services.impl.PatientServiceImpl
 import java.net.URI
 import javax.persistence.EntityNotFoundException
-import javax.validation.Valid
 
 @RestController
 @RequestMapping("/patients")
@@ -23,7 +21,7 @@ class PatientController(val patientService: PatientServiceImpl) {
     fun findAll(): List<Patient> = patientService.findAll()
 
     @PostMapping()
-    fun create(@RequestBody patient: PatientRequest): ResponseEntity<Patient> {
+    fun create(@RequestBody patient: Patient): ResponseEntity<Patient> {
         val savedPatient = patientService.create(patient)
         val location: URI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").build(savedPatient.id)
         return ResponseEntity.created(location).build()

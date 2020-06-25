@@ -1,13 +1,9 @@
 package trabalho.trabalhojedersonbackend.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import lombok.NoArgsConstructor
-import org.hibernate.validator.constraints.br.CPF
-import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
 import javax.persistence.*
 
-@NoArgsConstructor
 @Entity
 data class Patient(
 
