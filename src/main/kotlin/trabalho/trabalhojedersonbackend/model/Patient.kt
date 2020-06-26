@@ -1,7 +1,6 @@
 package trabalho.trabalhojedersonbackend.model
 
-import org.hibernate.validator.constraints.br.CPF
-import org.springframework.format.annotation.DateTimeFormat
+import com.fasterxml.jackson.annotation.JsonFormat
 import java.time.LocalDate
 import javax.persistence.*
 
@@ -21,6 +20,8 @@ data class Patient(
         @Column(length = 11)
         val phone: String,
 
+        @Column(nullable = false)
+        @JsonFormat(pattern = "yyyy-MM-dd")
         val birthDate: LocalDate,
 
         @Column(nullable = false)
