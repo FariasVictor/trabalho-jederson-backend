@@ -1,6 +1,6 @@
 package trabalho.trabalhojedersonbackend.model
 
-import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.LocalDate
 import javax.persistence.*
 
@@ -20,16 +20,22 @@ data class Patient(
         @Column(length = 11)
         val phone: String,
 
-        @Column(nullable = false)
-        @JsonFormat(pattern = "yyyy-MM-dd")
         val birthDate: LocalDate,
 
         @Column(nullable = false)
-        val insuranceNumber: String?,
+        val insuranceNumber: String,
 
         @OneToOne(cascade = [CascadeType.ALL])
-        val address: Address?
+        val address: Address,
 
-) : Identifiable(id, name, phone, address) {
+        @JsonIgnore
+        @OneToMany(mappedBy = "patient", cascade = [CascadeType.ALL])
+        val exams:List<Exam>?,
+
+        @JsonIgnore
+        @OneToMany(mappedBy = "patient", cascade = [CascadeType.ALL])
+        val orders:List<Order>?
+
+) {
 
 }
