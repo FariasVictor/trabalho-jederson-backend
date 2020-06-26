@@ -27,7 +27,7 @@ class DoctorController(private val doctorService: DoctorService) {
         }?: ResponseEntity.notFound().build()
     }
 
-    @PostMapping("/save")
+    @PostMapping
     fun createDoctor(@Valid @RequestBody doctor: Doctor): ResponseEntity<Doctor> {
         return doctorService.save(doctor).let {
             ResponseEntity.ok(it)

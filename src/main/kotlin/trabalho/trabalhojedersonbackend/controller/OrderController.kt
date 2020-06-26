@@ -12,7 +12,7 @@ import java.net.URI
 import javax.persistence.EntityNotFoundException
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/order")
 class OrderController(val orderService: OrderService) {
 
     @GetMapping

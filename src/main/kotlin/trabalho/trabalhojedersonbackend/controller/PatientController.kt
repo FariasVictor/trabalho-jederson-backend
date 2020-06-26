@@ -9,7 +9,7 @@ import java.net.URI
 import javax.persistence.EntityNotFoundException
 
 @RestController
-@RequestMapping("/patients")
+@RequestMapping("/patient")
 class PatientController(val patientService: PatientServiceImpl) {
 
     @GetMapping("/{id}")

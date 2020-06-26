@@ -28,7 +28,7 @@ class ClinicController(private val clinicService: ClinicService) {
         }?:ResponseEntity.notFound().build()
     }
 
-    @PostMapping("/save")
+    @PostMapping("/")
     fun createClinic(@Valid @RequestBody clinic: Clinic): ResponseEntity<Clinic> {
         return clinicService.save(clinic).let {
             ResponseEntity.ok(it)
