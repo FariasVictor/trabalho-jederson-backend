@@ -71,6 +71,7 @@ class ExamController(private val examService: ExamService) {
         return ResponseEntity.created(location).body(examCreated)
     }
 
+    //TODO criar um novo patch quando for para concluido adicionar o examData.
     @PatchMapping("/{id}")
     fun updateExam(@Valid @PathVariable id: Long): ResponseEntity<Any> {
         return try {
@@ -82,7 +83,4 @@ class ExamController(private val examService: ExamService) {
             ResponseEntity.badRequest().body(ex.message)
         }
     }
-
-    @DeleteMapping("/{id}")
-    fun deleteExamById(@PathVariable(value = "id") id: Long): ResponseEntity<Any> = ResponseEntity.noContent().build()
 }

@@ -7,10 +7,9 @@ import trabalho.trabalhojedersonbackend.model.Patient
 import trabalho.trabalhojedersonbackend.services.impl.PatientServiceImpl
 import java.net.URI
 import javax.persistence.EntityNotFoundException
-import javax.validation.Valid
 
 @RestController
-@RequestMapping("/patients")
+@RequestMapping("/patient")
 class PatientController(val patientService: PatientServiceImpl) {
 
     @GetMapping("/{id}")

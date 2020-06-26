@@ -10,7 +10,7 @@ import trabalho.trabalhojedersonbackend.services.AccessService
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("/accesses")
+@RequestMapping("/access")
 class AccessController(val accessService: AccessService) {
 
     @PostMapping

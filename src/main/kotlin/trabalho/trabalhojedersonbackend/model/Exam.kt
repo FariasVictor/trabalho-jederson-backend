@@ -31,12 +31,12 @@ data class Exam(
         val examData: ExamData?,
 
         @ManyToOne
-        val patient: Patient?,
+        val patient: Patient,
 
         @ManyToOne
-        val doctor: Doctor?,
+        val doctor: Doctor,
 
         @ManyToOne
-        val clinic: Clinic?) {
+        val clinic: Clinic) {
 
 }

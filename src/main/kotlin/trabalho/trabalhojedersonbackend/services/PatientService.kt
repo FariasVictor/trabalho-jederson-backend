@@ -1,7 +1,5 @@
 package trabalho.trabalhojedersonbackend.services
 
-import trabalho.trabalhojedersonbackend.enums.ExamStatusEnum
-import trabalho.trabalhojedersonbackend.model.Clinic
 import trabalho.trabalhojedersonbackend.model.Patient
 
 interface PatientService {

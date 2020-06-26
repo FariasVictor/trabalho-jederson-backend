@@ -1,9 +1,10 @@
 package trabalho.trabalhojedersonbackend.services.impl;
 
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Service
 import trabalho.trabalhojedersonbackend.enums.ExamStatusEnum
 import trabalho.trabalhojedersonbackend.enums.UserTypeEnum
+import trabalho.trabalhojedersonbackend.exceptions.BadRequestException
 import trabalho.trabalhojedersonbackend.exceptions.ExamAlreadyAnalisedException
 import trabalho.trabalhojedersonbackend.model.Exam
 import trabalho.trabalhojedersonbackend.repositories.ExamRepository
