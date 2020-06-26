@@ -27,12 +27,12 @@ data class Exam(
         var status: ExamStatusEnum?,
 
         @ManyToOne
-        val patient: Patient?,
+        val patient: Patient,
 
         @ManyToOne
-        val doctor: Doctor?,
+        val doctor: Doctor,
 
         @ManyToOne
-        val clinic: Clinic?) {
+        val clinic: Clinic) {
 
 }

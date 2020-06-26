@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service
 import trabalho.trabalhojedersonbackend.enums.OrderStatusEnum
 import trabalho.trabalhojedersonbackend.enums.UserTypeEnum
 import trabalho.trabalhojedersonbackend.model.Order
+import trabalho.trabalhojedersonbackend.model.request.OrderRequest
 
 @Service
 interface OrderService {
@@ -21,6 +22,6 @@ interface OrderService {
     fun findClinicOrdersByStatus(clinicId: Long, status: OrderStatusEnum): List<Order>
     fun findDoctorOrdersByStatus(doctorId: Long, status: OrderStatusEnum): List<Order>
 
-    fun create(order:Order): Long
+    fun create(orderRequest: OrderRequest): Long
     fun update(id: Long, newStatusEnum: OrderStatusEnum )
 }

@@ -12,27 +12,28 @@ class Order(
 
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: Long,
+        var id: Long?,
 
-        val examType: String,
+        var examType: String?,
 
         @Enumerated(EnumType.STRING)
         var status: OrderStatusEnum?,
 
-        @OneToOne
-        val patient: Patient?,
+        @ManyToOne
+        var patient: Patient?,
 
-        @OneToOne
-        val doctor: Doctor?,
+        @ManyToOne
+        var doctor: Doctor?,
 
-        @OneToOne
-        val clinic: Clinic?,
+        @ManyToOne
+        var clinic: Clinic?,
 
         @CreationTimestamp
         val creationDate: LocalDateTime?,
 
         @UpdateTimestamp
-        val statusChanged: LocalDateTime?
+        var statusChanged: LocalDateTime?
 
 ) {
+    constructor() : this(null, null, null, null, null, null, null, null)
 }

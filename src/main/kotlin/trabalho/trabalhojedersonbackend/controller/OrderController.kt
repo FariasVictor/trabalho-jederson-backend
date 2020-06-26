@@ -6,6 +6,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import trabalho.trabalhojedersonbackend.enums.OrderStatusEnum
 import trabalho.trabalhojedersonbackend.enums.UserTypeEnum
 import trabalho.trabalhojedersonbackend.model.Order
+import trabalho.trabalhojedersonbackend.model.request.OrderRequest
 import trabalho.trabalhojedersonbackend.services.OrderService
 import java.net.URI
 import javax.persistence.EntityNotFoundException
@@ -46,8 +47,8 @@ class OrderController(val orderService: OrderService) {
     }
 
     @PostMapping
-    fun create(@RequestBody order: Order): ResponseEntity<Any> {
-        val id: Long = orderService.create(order)
+    fun create(@RequestBody orderRequest: OrderRequest): ResponseEntity<Any> {
+        val id: Long = orderService.create(orderRequest)
         var location: URI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").build(id)
         return ResponseEntity.created(location).build()
     }
