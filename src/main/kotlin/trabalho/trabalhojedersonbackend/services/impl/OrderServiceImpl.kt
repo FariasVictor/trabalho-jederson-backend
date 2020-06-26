@@ -5,13 +5,15 @@ import org.springframework.stereotype.Service
 import trabalho.trabalhojedersonbackend.exceptions.OrderAlreadyAnsweredException
 import trabalho.trabalhojedersonbackend.enums.OrderStatusEnum
 import trabalho.trabalhojedersonbackend.enums.UserTypeEnum
+import trabalho.trabalhojedersonbackend.model.Exam
 import trabalho.trabalhojedersonbackend.model.Order
 import trabalho.trabalhojedersonbackend.repositories.OrderRepository
+import trabalho.trabalhojedersonbackend.services.ExamService
 import trabalho.trabalhojedersonbackend.services.OrderService
 import javax.persistence.EntityNotFoundException
 
 @Service
-class OrderServiceImpl(val orderRepository: OrderRepository) : OrderService {
+class OrderServiceImpl(val orderRepository: OrderRepository, val examService: ExamService) : OrderService {
 
     override fun findById(id: Long): Order? = orderRepository.findByIdOrNull(id)
 
@@ -98,7 +100,18 @@ class OrderServiceImpl(val orderRepository: OrderRepository) : OrderService {
                 throw OrderAlreadyAnsweredException()
             }
             it.status = newStatusEnum
-            orderRepository.save(it)
+            val order = orderRepository.save(it)
+            if (newStatusEnum == OrderStatusEnum.SOLICITACAO_CONCLUIDA) {
+
+                examService.save(Exam(null,
+                        null,
+                        order.examType,
+                        null,
+                        order.patient,
+                        order.doctor,
+                        order.clinic)
+                )
+            }
         } ?: throw EntityNotFoundException()
     }
 
