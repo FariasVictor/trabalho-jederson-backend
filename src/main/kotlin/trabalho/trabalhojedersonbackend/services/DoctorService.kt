@@ -10,5 +10,7 @@ interface DoctorService {
 
     fun save(doctor: Doctor): Doctor
 
-    fun deleteById(id: Long)
+    fun update(id: Long, doctor: Doctor)
+
+    fun delete(id: Long)
 }

@@ -24,7 +24,7 @@ class PatientController(val patientService: PatientServiceImpl) {
     @PostMapping()
     fun create(@RequestBody patient: Patient): ResponseEntity<Patient> {
         val savedPatient = patientService.create(patient)
-        val location: URI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").build(savedPatient.id)
+        val location: URI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/patients/{id}").build(savedPatient.id)
         return ResponseEntity.created(location).build()
     }
 
