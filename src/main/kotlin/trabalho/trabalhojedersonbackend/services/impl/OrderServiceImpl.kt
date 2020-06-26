@@ -109,5 +109,30 @@ class OrderServiceImpl(val orderRepository: OrderRepository,
         }
     }
 
+    override fun create(order: Order): Long {
+        order.status = OrderStatusEnum.SOLICITACAO_ABERTA
+        return orderRepository.save(order).id;
+    }
+
+    override fun update(id: Long, newStatusEnum: OrderStatusEnum) {
+        orderRepository.findByIdOrNull(id)?.let {
+            if (it.status != (OrderStatusEnum.SOLICITACAO_ABERTA)) {
+                throw OrderAlreadyAnsweredException()
+            }
+            it.status = newStatusEnum
+            val order = orderRepository.save(it)
+            if (newStatusEnum == OrderStatusEnum.SOLICITACAO_CONCLUIDA) {
+
+                examService.save(Exam(null,
+                        null,
+                        order.examType,
+                        null,
+                        order.patient,
+                        order.doctor,
+                        order.clinic)
+                )
+            }
+        } ?: throw EntityNotFoundException()
+    }
 
 }
