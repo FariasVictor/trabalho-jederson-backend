@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.DeleteMapping
 import trabalho.trabalhojedersonbackend.model.Doctor
 import trabalho.trabalhojedersonbackend.services.DoctorService
+import javax.persistence.EntityNotFoundException
 import javax.validation.Valid
 
 @RestController
 @RequestMapping("/doctor")
 class DoctorController(private val doctorService: DoctorService) {
 
-    @GetMapping()
+    @GetMapping
     fun findAllDoctors() = doctorService.findAll()
 
     @GetMapping("/{id}")
@@ -34,17 +35,24 @@ class DoctorController(private val doctorService: DoctorService) {
         }
     }
 
-    @PatchMapping
-    fun updateDoctor(@Valid @RequestBody doctor: Doctor): ResponseEntity<Doctor>? {
-        return doctorService.save(doctor).let {
-            ResponseEntity.ok(it)
+    @PatchMapping("/{id}")
+    fun updateDoctor(@Valid @RequestBody doctor: Doctor,
+                     @PathVariable(value = "id") id: Long): ResponseEntity<Doctor>? {
+        return try {
+            doctorService.update(id, doctor)
+            ResponseEntity.ok().build()
+        } catch (ex: EntityNotFoundException) {
+            ResponseEntity.notFound().build()
         }
     }
 
     @DeleteMapping("/{id}")
-    fun deleteDoctorById(@PathVariable(value = "id") id: Long) {
-        return doctorService.deleteById(id).let {
-            ResponseEntity.ok()
+    fun deleteDoctorById(@PathVariable(value = "id") id: Long): ResponseEntity<Doctor>? {
+        return try {
+            doctorService.delete(id)
+            ResponseEntity.noContent().build()
+        } catch (ex: EntityNotFoundException) {
+            ResponseEntity.notFound().build()
         }
     }
 }

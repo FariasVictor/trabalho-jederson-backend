@@ -7,10 +7,8 @@ import javax.persistence.*
 data class Clinic(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: Long = -1,
-
+        var id: Long = -1,
         val name: String,
-
         val phone: String,
 
         @OneToOne(cascade = [CascadeType.ALL])

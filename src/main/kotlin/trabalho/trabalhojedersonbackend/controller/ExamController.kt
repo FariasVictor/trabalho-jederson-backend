@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import trabalho.trabalhojedersonbackend.enums.ExamStatusEnum
 import trabalho.trabalhojedersonbackend.enums.UserTypeEnum
+import trabalho.trabalhojedersonbackend.exceptions.BadRequestException
 import trabalho.trabalhojedersonbackend.exceptions.ExamAlreadyAnalisedException
 import trabalho.trabalhojedersonbackend.model.Exam
 import trabalho.trabalhojedersonbackend.services.ExamService
@@ -30,7 +31,7 @@ class ExamController(private val examService: ExamService) {
     fun findUserAllExams(@PathVariable userType: UserTypeEnum, @PathVariable userId: Long): ResponseEntity<List<Exam>?> {
         return try {
             ResponseEntity.ok(examService.findUserAllExams(userType, userId))
-        }catch (ex: EntityNotFoundException){
+        } catch (ex: EntityNotFoundException) {
             ResponseEntity.notFound().build()
         }
     }
@@ -47,6 +48,22 @@ class ExamController(private val examService: ExamService) {
         }
     }
 
+    //Permite a clínica logada buscar os exames por usuário(seja médico ou paciente)
+    @GetMapping("byUser/{clinicId}/{userToBeFoundType}/{userId}")
+    fun findExamByUser(@PathVariable clinicId: Long,
+                       @PathVariable userToBeFoundType: UserTypeEnum,
+                       @PathVariable userId: Long): ResponseEntity<Any> {
+        return try {
+            examService.clinicFindByUser(clinicId, userToBeFoundType, userId).let {
+                ResponseEntity.ok(it)
+            }
+        } catch (ex: EntityNotFoundException) {
+            ResponseEntity.notFound().build()
+        } catch (ex: BadRequestException) {
+            ResponseEntity.badRequest().body(ex.message)
+        }
+    }
+
     @PostMapping
     fun create(@RequestBody exam: Exam): ResponseEntity<Exam> {
         val examCreated = examService.save(exam)
@@ -54,6 +71,7 @@ class ExamController(private val examService: ExamService) {
         return ResponseEntity.created(location).body(examCreated)
     }
 
+    //TODO criar um novo patch quando for para concluido adicionar o examData.
     @PatchMapping("/{id}")
     fun updateExam(@Valid @PathVariable id: Long): ResponseEntity<Any> {
         return try {
@@ -65,7 +83,4 @@ class ExamController(private val examService: ExamService) {
             ResponseEntity.badRequest().body(ex.message)
         }
     }
-
-    @DeleteMapping("/{id}")
-    fun deleteExamById(@PathVariable(value = "id") id: Long): ResponseEntity<Any> = ResponseEntity.noContent().build()
 }
