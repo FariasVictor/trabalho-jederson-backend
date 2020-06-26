@@ -14,7 +14,7 @@ import trabalho.trabalhojedersonbackend.services.AddressService
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("/Address")
+@RequestMapping("/address")
 class AddressController(private val addressService: AddressService) {
 
     @GetMapping
