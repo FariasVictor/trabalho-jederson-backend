@@ -28,11 +28,7 @@ class ExamController(private val examService: ExamService) {
 
     @GetMapping("{userType}/{userId}")
     fun findUserAllExams(@PathVariable userType: UserTypeEnum, @PathVariable userId: Long): ResponseEntity<List<Exam>?> {
-        return try {
-            ResponseEntity.ok(examService.findUserAllExams(userType, userId))
-        }catch (ex: EntityNotFoundException){
-            ResponseEntity.notFound().build()
-        }
+        return ResponseEntity.ok(examService.findUserAllExams(userType, userId))
     }
 
     @GetMapping("{userType}/{userId}/{status}")
@@ -40,11 +36,7 @@ class ExamController(private val examService: ExamService) {
                           @PathVariable userId: Long,
                           @PathVariable status: ExamStatusEnum
     ): ResponseEntity<List<Exam>> {
-        return try {
-            ResponseEntity.ok(examService.findUserExamsByStatus(userType, userId, status))
-        } catch (ex: EntityNotFoundException) {
-            ResponseEntity.notFound().build()
-        }
+        return ResponseEntity.ok(examService.findUserExamsByStatus(userType, userId, status))
     }
 
     @PostMapping
