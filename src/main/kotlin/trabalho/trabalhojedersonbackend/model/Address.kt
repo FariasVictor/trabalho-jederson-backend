@@ -14,7 +14,7 @@ data class Address(
         var city: String,
         var street: String,
         var number: String,
-        var complement: String
+        var complement: String?
 ) {
 
 }

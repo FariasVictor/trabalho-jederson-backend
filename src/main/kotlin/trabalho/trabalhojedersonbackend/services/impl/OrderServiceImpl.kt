@@ -6,30 +6,23 @@ import trabalho.trabalhojedersonbackend.enums.OrderStatusEnum
 import trabalho.trabalhojedersonbackend.enums.UserTypeEnum
 import trabalho.trabalhojedersonbackend.exceptions.OrderAlreadyAnsweredException
 import trabalho.trabalhojedersonbackend.mapper.OrderMapper
+import trabalho.trabalhojedersonbackend.model.Exam
 import trabalho.trabalhojedersonbackend.model.Order
 import trabalho.trabalhojedersonbackend.model.request.OrderRequest
 import trabalho.trabalhojedersonbackend.repositories.OrderRepository
+import trabalho.trabalhojedersonbackend.services.ExamService
 import trabalho.trabalhojedersonbackend.services.OrderService
 import javax.persistence.EntityNotFoundException
 
 @Service
 class OrderServiceImpl(val orderRepository: OrderRepository,
-                       val orderMapper: OrderMapper) : OrderService {
+                       val orderMapper: OrderMapper,
+                        val examService: ExamService) : OrderService {
 
     override fun create(orderRequest: OrderRequest): Long {
         val order = orderMapper.toPatient(orderRequest)
         order.status = OrderStatusEnum.SOLICITACAO_ABERTA
-        return orderRepository.save(order).id!!;
-    }
-
-    override fun update(id: Long, newStatusEnum: OrderStatusEnum) {
-        orderRepository.findByIdOrNull(id)?.let {
-            if (it.status != (OrderStatusEnum.SOLICITACAO_ABERTA)) {
-                throw OrderAlreadyAnsweredException()
-            }
-            it.status = newStatusEnum
-            orderRepository.save(it)
-        } ?: throw EntityNotFoundException()
+        return orderRepository.save(order).id!!
     }
 
     override fun findById(id: Long): Order? = orderRepository.findByIdOrNull(id)
@@ -88,5 +81,26 @@ class OrderServiceImpl(val orderRepository: OrderRepository,
         return orderRepository.findByStatusAndDoctorId(status, doctorId)
     }
 
+    override fun update(id: Long, newStatusEnum: OrderStatusEnum) {
+        orderRepository.findByIdOrNull(id)?.let {
+            if (it.status != (OrderStatusEnum.SOLICITACAO_ABERTA)) {
+                throw OrderAlreadyAnsweredException()
+            }
+            it.status = newStatusEnum
+            val order = orderRepository.save(it)
+            if (newStatusEnum == OrderStatusEnum.SOLICITACAO_ACEITA) {
+
+                examService.save(Exam(null,
+                        null,
+                        order.examType!!,
+                        null,
+                        null,
+                        order.patient!!,
+                        order.doctor!!,
+                        order.clinic!!)
+                )
+            }
+        } ?: throw EntityNotFoundException()
+    }
 
 }

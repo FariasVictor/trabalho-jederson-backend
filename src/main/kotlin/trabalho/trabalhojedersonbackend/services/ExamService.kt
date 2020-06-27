@@ -10,6 +10,8 @@ interface ExamService {
 
     fun findById(id: Long): Exam?
 
+
+
     fun findUserAllExams(userType: UserTypeEnum, userId: Long): List<Exam>
     fun findAllByPatientId(patientId: Long): List<Exam>
     fun findAllByClinicId(clinicId: Long): List<Exam>
@@ -22,6 +24,10 @@ interface ExamService {
     fun findPatientExamsByStatus(patientId: Long, status: ExamStatusEnum): List<Exam>
     fun findClinicExamsByStatus(clinicId: Long, status: ExamStatusEnum): List<Exam>
     fun findDoctorExamsByStatus(doctorId: Long, status: ExamStatusEnum): List<Exam>
+
+    fun clinicFindByUser(clinicId: Long, userType: UserTypeEnum, userId: Long): List<Exam>
+    fun clinicFindByPatient(clinicId: Long, patientId: Long): List<Exam>
+    fun clinicFindByDoctor(clinicId: Long, doctorId: Long): List<Exam>
 
     fun save(exam: Exam): Exam?
 
