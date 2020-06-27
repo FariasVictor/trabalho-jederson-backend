@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import trabalho.trabalhojedersonbackend.enums.ExamStatusEnum
 import trabalho.trabalhojedersonbackend.enums.UserTypeEnum
+import trabalho.trabalhojedersonbackend.exceptions.BadRequestException
 import trabalho.trabalhojedersonbackend.exceptions.ExamAlreadyAnalisedException
 import trabalho.trabalhojedersonbackend.model.Exam
 import trabalho.trabalhojedersonbackend.services.ExamService
@@ -48,8 +49,6 @@ class ExamController(private val examService: ExamService) {
             examService.clinicFindByUser(clinicId, userToBeFoundType, userId).let {
                 ResponseEntity.ok(it)
             }
-        } catch (ex: EntityNotFoundException) {
-            ResponseEntity.notFound().build()
         } catch (ex: BadRequestException) {
             ResponseEntity.badRequest().body(ex.message)
         }

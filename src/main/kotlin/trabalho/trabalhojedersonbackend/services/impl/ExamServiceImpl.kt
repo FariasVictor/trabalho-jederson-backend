@@ -84,17 +84,11 @@ class ExamServiceImpl(val examRepository: ExamRepository) : ExamService {
     }
 
     override fun clinicFindByPatient(clinicId: Long, patientId: Long): List<Exam> {
-        return examRepository.findByClinicIdAndPatientId(clinicId, patientId).let {
-            if (it.isEmpty()) throw EntityNotFoundException()
-            it
-        }
+        return examRepository.findByClinicIdAndPatientId(clinicId, patientId)
     }
 
     override fun clinicFindByDoctor(clinicId: Long, doctorId: Long): List<Exam> {
-        return examRepository.findByClinicIdAndDoctorId(clinicId, doctorId).let {
-            if (it.isEmpty()) throw EntityNotFoundException()
-            it
-        }
+        return examRepository.findByClinicIdAndDoctorId(clinicId, doctorId)
     }
 
     override fun save(exam: Exam): Exam? {
