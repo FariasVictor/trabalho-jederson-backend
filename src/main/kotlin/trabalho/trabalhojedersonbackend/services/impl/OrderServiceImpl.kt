@@ -92,6 +92,7 @@ class OrderServiceImpl(val orderRepository: OrderRepository,
 
                 examService.save(Exam(null,
                         null,
+                        order.creationDate,
                         order.examType!!,
                         null,
                         null,
