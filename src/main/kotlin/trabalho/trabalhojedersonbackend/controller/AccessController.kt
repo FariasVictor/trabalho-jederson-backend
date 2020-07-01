@@ -14,13 +14,13 @@ import javax.validation.Valid
 class AccessController(val accessService: AccessService) {
 
     @PostMapping
-    fun login(@RequestBody @Valid accessRequest: AccessRequest): ResponseEntity<AccessResponse>{
+    fun login(@RequestBody @Valid accessRequest: AccessRequest): ResponseEntity<Any> {
         return try {
             accessService.login(accessRequest.username, accessRequest.password).let {
                 ResponseEntity.ok(it)
             }
-        }catch (ex: InvalidAccessDataException){
-            ResponseEntity.status(401).build()
+        } catch (ex: InvalidAccessDataException) {
+            ResponseEntity.status(401).body(ex.message)
         }
     }
 }
