@@ -1,10 +1,10 @@
 package trabalho.trabalhojedersonbackend.model
 
-import org.hibernate.annotations.CreationTimestamp
-
+import com.fasterxml.jackson.annotation.JsonIgnore
 import trabalho.trabalhojedersonbackend.enums.ExamStatusEnum
 
 import java.time.LocalDateTime
+import javax.persistence.CascadeType
 
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -13,7 +13,8 @@ import javax.persistence.Id
 import javax.persistence.ManyToOne
 import javax.persistence.Enumerated
 import javax.persistence.EnumType
-import javax.persistence.OneToOne
+import javax.persistence.FetchType
+import javax.persistence.OneToMany
 
 @Entity
 data class Exam(
@@ -27,8 +28,9 @@ data class Exam(
         @Enumerated(EnumType.STRING)
         var status: ExamStatusEnum?,
 
-        @ManyToOne
-        val examData: ExamData?,
+        @JsonIgnore
+        @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+        var examData: List<ExamData>?,
 
         @ManyToOne
         val patient: Patient,

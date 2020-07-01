@@ -2,11 +2,13 @@ package trabalho.trabalhojedersonbackend.services.impl;
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.util.StringUtils.isEmpty
 import trabalho.trabalhojedersonbackend.enums.ExamStatusEnum
 import trabalho.trabalhojedersonbackend.enums.UserTypeEnum
 import trabalho.trabalhojedersonbackend.exceptions.BadRequestException
 import trabalho.trabalhojedersonbackend.exceptions.ExamAlreadyAnalisedException
 import trabalho.trabalhojedersonbackend.model.Exam
+import trabalho.trabalhojedersonbackend.model.ExamData
 import trabalho.trabalhojedersonbackend.repositories.ExamRepository
 import trabalho.trabalhojedersonbackend.services.ExamService
 import java.time.LocalDateTime
@@ -120,14 +122,14 @@ class ExamServiceImpl(val examRepository: ExamRepository) : ExamService {
         return examRepository.save(exam)
     }
 
-    //NAO TESTADO, N FAÇO IDEIA SE TÁ FUNCIONANDO CERTO, NA MINHA CABEÇA RODOU KKKK
-    override fun update(id: Long): Exam {
+    override fun update(id: Long, examData: List<ExamData>?): Exam {
         examRepository.findByIdOrNull(id)?.let { exam ->
-            if (exam.status == (ExamStatusEnum.EXAME_EM_ANDAMENTO)) {
+            if (exam.status == ExamStatusEnum.EXAME_EM_ANDAMENTO && !isEmpty(examData)) {
                 exam.status = ExamStatusEnum.EXAME_CONCLUIDO
                 exam.examCompletedDate = LocalDateTime.now()
+                exam.examData = examData
                 return examRepository.save(exam)
-            } else if (exam.status == (ExamStatusEnum.EXAME_CONCLUIDO)) {
+            } else if (exam.status == ExamStatusEnum.EXAME_CONCLUIDO) {
                 exam.status = ExamStatusEnum.EXAME_ANALISADO
                 return examRepository.save(exam)
             }

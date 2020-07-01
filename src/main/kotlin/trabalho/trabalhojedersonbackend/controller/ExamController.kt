@@ -8,6 +8,7 @@ import trabalho.trabalhojedersonbackend.enums.UserTypeEnum
 import trabalho.trabalhojedersonbackend.exceptions.BadRequestException
 import trabalho.trabalhojedersonbackend.exceptions.ExamAlreadyAnalisedException
 import trabalho.trabalhojedersonbackend.model.Exam
+import trabalho.trabalhojedersonbackend.model.ExamData
 import trabalho.trabalhojedersonbackend.services.ExamService
 import java.net.URI
 import javax.persistence.EntityNotFoundException
@@ -72,10 +73,12 @@ class ExamController(private val examService: ExamService) {
     }
 
     //TODO criar um novo patch quando for para concluido adicionar o examData.
+
+
     @PatchMapping("/{id}")
-    fun updateExam(@Valid @PathVariable id: Long): ResponseEntity<Any> {
+    fun updateExam(@Valid @PathVariable id: Long, @RequestBody examData: List<ExamData>?): ResponseEntity<Any> {
         return try {
-            val exam = examService.update(id)
+            val exam = examService.update(id, examData)
             ResponseEntity.ok(exam)
         } catch (ex: EntityNotFoundException) {
             ResponseEntity.notFound().build()
