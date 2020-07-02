@@ -6,7 +6,7 @@ import trabalho.trabalhojedersonbackend.enums.ExamStatusEnum
 import trabalho.trabalhojedersonbackend.model.Exam;
 
 @Repository
-public interface ExamRepository : JpaRepository<Exam, Long> {
+public interface ExamRepository: JpaRepository<Exam, Long> {
 
     fun findByStatus(status: ExamStatusEnum): List<Exam>
 

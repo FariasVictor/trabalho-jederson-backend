@@ -6,14 +6,20 @@ import trabalho.trabalhojedersonbackend.enums.ExamStatusEnum
 import trabalho.trabalhojedersonbackend.enums.UserTypeEnum
 import trabalho.trabalhojedersonbackend.exceptions.BadRequestException
 import trabalho.trabalhojedersonbackend.exceptions.ExamAlreadyAnalisedException
+import trabalho.trabalhojedersonbackend.mapper.ExamDataMapper
 import trabalho.trabalhojedersonbackend.model.Exam
+import trabalho.trabalhojedersonbackend.model.ExamData
+import trabalho.trabalhojedersonbackend.model.request.ExamDataRequest
+import trabalho.trabalhojedersonbackend.repositories.ExamDataRepository
 import trabalho.trabalhojedersonbackend.repositories.ExamRepository
 import trabalho.trabalhojedersonbackend.services.ExamService
 import java.time.LocalDateTime
 import javax.persistence.EntityNotFoundException
 
 @Service
-class ExamServiceImpl(val examRepository: ExamRepository) : ExamService {
+class ExamServiceImpl(val examRepository: ExamRepository,
+                      val examDataRepository: ExamDataRepository,
+                      val examDataMapper: ExamDataMapper) : ExamService {
 
     override fun findAll(): List<Exam>? = examRepository.findAll()
 
@@ -34,15 +40,24 @@ class ExamServiceImpl(val examRepository: ExamRepository) : ExamService {
     }
 
     override fun findAllByPatientId(patientId: Long): List<Exam> {
-        return examRepository.findByPatientId(patientId)
+        return examRepository.findByPatientId(patientId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
+            else it
+        }
     }
 
     override fun findAllByClinicId(clinicId: Long): List<Exam> {
-        return examRepository.findByClinicId(clinicId)
+        return examRepository.findByClinicId(clinicId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
+            else it
+        }
     }
 
     override fun findAllByDoctorId(doctorId: Long): List<Exam> {
-        return examRepository.findByDoctorId(doctorId)
+        return examRepository.findByDoctorId(doctorId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
+            else it
+        }
     }
 
     override fun findUserExamsByStatus(userType: UserTypeEnum, userId: Long, status: ExamStatusEnum): List<Exam> {
@@ -60,15 +75,24 @@ class ExamServiceImpl(val examRepository: ExamRepository) : ExamService {
     }
 
     override fun findPatientExamsByStatus(patientId: Long, status: ExamStatusEnum): List<Exam> {
-        return examRepository.findByStatusAndPatientId(status, patientId)
+        return examRepository.findByStatusAndPatientId(status, patientId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
+            else it
+        }
     }
 
     override fun findClinicExamsByStatus(clinicId: Long, status: ExamStatusEnum): List<Exam> {
-        return examRepository.findByStatusAndClinicId(status, clinicId)
+        return examRepository.findByStatusAndClinicId(status, clinicId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
+            else it
+        }
     }
 
     override fun findDoctorExamsByStatus(doctorId: Long, status: ExamStatusEnum): List<Exam> {
-        return examRepository.findByStatusAndDoctorId(status, doctorId)
+        return examRepository.findByStatusAndDoctorId(status, doctorId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
+            else it
+        }
     }
 
     override fun clinicFindByUser(clinicId: Long, userType: UserTypeEnum, userId: Long): List<Exam> {
@@ -84,11 +108,17 @@ class ExamServiceImpl(val examRepository: ExamRepository) : ExamService {
     }
 
     override fun clinicFindByPatient(clinicId: Long, patientId: Long): List<Exam> {
-        return examRepository.findByClinicIdAndPatientId(clinicId, patientId)
+        return examRepository.findByClinicIdAndPatientId(clinicId, patientId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
+            it
+        }
     }
 
     override fun clinicFindByDoctor(clinicId: Long, doctorId: Long): List<Exam> {
-        return examRepository.findByClinicIdAndDoctorId(clinicId, doctorId)
+        return examRepository.findByClinicIdAndDoctorId(clinicId, doctorId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
+            it
+        }
     }
 
     override fun save(exam: Exam): Exam? {
@@ -96,16 +126,18 @@ class ExamServiceImpl(val examRepository: ExamRepository) : ExamService {
         return examRepository.save(exam)
     }
 
-    //NAO TESTADO, N FAÇO IDEIA SE TÁ FUNCIONANDO CERTO, NA MINHA CABEÇA RODOU KKKK
-    override fun update(id: Long): Exam {
-        examRepository.findByIdOrNull(id)?.let { exam ->
-            if (exam.status == (ExamStatusEnum.EXAME_EM_ANDAMENTO)) {
-                exam.status = ExamStatusEnum.EXAME_CONCLUIDO
-                exam.examCompletedDate = LocalDateTime.now()
-                return examRepository.save(exam)
-            } else if (exam.status == (ExamStatusEnum.EXAME_CONCLUIDO)) {
-                exam.status = ExamStatusEnum.EXAME_ANALISADO
-                return examRepository.save(exam)
+    override fun update(id: Long, examDataRequests: List<ExamDataRequest>): Exam {
+        examRepository.findByIdOrNull(id)?.let {
+            if (it.status == ExamStatusEnum.EXAME_EM_ANDAMENTO) {
+                it.status = ExamStatusEnum.EXAME_CONCLUIDO
+                it.examCompletedDate = LocalDateTime.now()
+                it.examData = examDataRequests.map {
+                    it -> examDataRepository.save(examDataMapper.toExamData(it))
+                }
+                return examRepository.save(it)
+            } else if (it.status == ExamStatusEnum.EXAME_CONCLUIDO) {
+                it.status = ExamStatusEnum.EXAME_ANALISADO
+                return examRepository.save(it)
             }
             throw ExamAlreadyAnalisedException()
         } ?: throw EntityNotFoundException()

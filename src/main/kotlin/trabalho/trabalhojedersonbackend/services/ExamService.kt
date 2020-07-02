@@ -3,6 +3,8 @@ package trabalho.trabalhojedersonbackend.services
 import trabalho.trabalhojedersonbackend.enums.ExamStatusEnum
 import trabalho.trabalhojedersonbackend.enums.UserTypeEnum
 import trabalho.trabalhojedersonbackend.model.Exam
+import trabalho.trabalhojedersonbackend.model.ExamData
+import trabalho.trabalhojedersonbackend.model.request.ExamDataRequest
 
 interface ExamService {
 
@@ -33,5 +35,5 @@ interface ExamService {
 
     fun deleteById(id: Long)
 
-    fun update(id: Long): Exam
+    fun update(id: Long, examDataRequests: List<ExamDataRequest>): Exam
 }

@@ -14,7 +14,7 @@ class OrderMapper(val clinicRepository: ClinicRepository,
                   val patientRepository: PatientRepository,
                   val doctorRepository: DoctorRepository) {
 
-    fun toPatient(orderRequest: OrderRequest): Order {
+    fun toOrder(orderRequest: OrderRequest): Order {
         val order = Order()
         order.examType=orderRequest.examType
         order.patient=patientRepository.findByIdOrNull(orderRequest.patientId)?: throw BadRequestException("Informe o paciente")
