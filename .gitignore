@@ -31,5 +31,7 @@ out/
 ### VS Code ###
 .vscode/
 
+
 src/main/resources/application.properties
 
+/src/main/kotlin/trabalho/trabalhojedersonbackend/resources/application.properties.properties

@@ -26,9 +26,11 @@ class OrderController(val orderService: OrderService) {
 
     @GetMapping("{userType}/{userId}")
     fun findOrdersByUser(@PathVariable userType: UserTypeEnum, @PathVariable userId: Long): ResponseEntity<List<Order>> {
-
-        return ResponseEntity.ok(orderService.findAllByUser(userType, userId))
-
+        return try {
+            ResponseEntity.ok(orderService.findAllByUser(userType, userId))
+        } catch (ex: EntityNotFoundException) {
+            ResponseEntity.notFound().build()
+        }
     }
 
     @GetMapping("/{userType}/{userId}/{status}")
@@ -37,8 +39,11 @@ class OrderController(val orderService: OrderService) {
             @PathVariable userId: Long,
             @PathVariable status: OrderStatusEnum)
             : ResponseEntity<List<Order>> {
-        return ResponseEntity.ok(orderService.findUserOrdersByStatus(userType, userId, status))
-
+        return try {
+            ResponseEntity.ok(orderService.findUserOrdersByStatus(userType,userId,status))
+        }catch (ex: EntityNotFoundException){
+            ResponseEntity.notFound().build()
+        }
     }
 
     @PostMapping
