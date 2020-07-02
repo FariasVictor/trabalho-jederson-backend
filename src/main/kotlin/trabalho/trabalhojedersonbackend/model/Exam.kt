@@ -23,8 +23,6 @@ data class Exam(
 
         var examCompletedDate: LocalDateTime?,
 
-        var examRequestedDateTime: LocalDateTime?,
-
         val type: String,
 
         @Enumerated(EnumType.STRING)

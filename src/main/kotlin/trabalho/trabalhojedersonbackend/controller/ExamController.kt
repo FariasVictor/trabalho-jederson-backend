@@ -30,7 +30,11 @@ class ExamController(private val examService: ExamService) {
 
     @GetMapping("{userType}/{userId}")
     fun findUserAllExams(@PathVariable userType: UserTypeEnum, @PathVariable userId: Long): ResponseEntity<List<Exam>?> {
-        return ResponseEntity.ok(examService.findUserAllExams(userType, userId))
+        return try {
+            ResponseEntity.ok(examService.findUserAllExams(userType, userId))
+        } catch (ex: EntityNotFoundException) {
+            ResponseEntity.notFound().build()
+        }
     }
 
     @GetMapping("{userType}/{userId}/{status}")
@@ -38,7 +42,11 @@ class ExamController(private val examService: ExamService) {
                           @PathVariable userId: Long,
                           @PathVariable status: ExamStatusEnum
     ): ResponseEntity<List<Exam>> {
-        return ResponseEntity.ok(examService.findUserExamsByStatus(userType, userId, status))
+        return try {
+            ResponseEntity.ok(examService.findUserExamsByStatus(userType, userId, status))
+        } catch (ex: EntityNotFoundException) {
+            ResponseEntity.notFound().build()
+        }
     }
 
     //Permite a clínica logada buscar os exames por usuário(seja médico ou paciente)
@@ -50,6 +58,8 @@ class ExamController(private val examService: ExamService) {
             examService.clinicFindByUser(clinicId, userToBeFoundType, userId).let {
                 ResponseEntity.ok(it)
             }
+        } catch (ex: EntityNotFoundException) {
+            ResponseEntity.notFound().build()
         } catch (ex: BadRequestException) {
             ResponseEntity.badRequest().body(ex.message)
         }

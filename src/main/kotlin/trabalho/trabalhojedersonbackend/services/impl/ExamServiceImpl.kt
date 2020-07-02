@@ -36,15 +36,24 @@ class ExamServiceImpl(val examRepository: ExamRepository) : ExamService {
     }
 
     override fun findAllByPatientId(patientId: Long): List<Exam> {
-        return examRepository.findByPatientId(patientId)
+        return examRepository.findByPatientId(patientId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
+            else it
+        }
     }
 
     override fun findAllByClinicId(clinicId: Long): List<Exam> {
-        return examRepository.findByClinicId(clinicId)
+        return examRepository.findByClinicId(clinicId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
+            else it
+        }
     }
 
     override fun findAllByDoctorId(doctorId: Long): List<Exam> {
-        return examRepository.findByDoctorId(doctorId)
+        return examRepository.findByDoctorId(doctorId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
+            else it
+        }
     }
 
     override fun findUserExamsByStatus(userType: UserTypeEnum, userId: Long, status: ExamStatusEnum): List<Exam> {
@@ -62,15 +71,24 @@ class ExamServiceImpl(val examRepository: ExamRepository) : ExamService {
     }
 
     override fun findPatientExamsByStatus(patientId: Long, status: ExamStatusEnum): List<Exam> {
-        return examRepository.findByStatusAndPatientId(status, patientId)
+        return examRepository.findByStatusAndPatientId(status, patientId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
+            else it
+        }
     }
 
     override fun findClinicExamsByStatus(clinicId: Long, status: ExamStatusEnum): List<Exam> {
-        return examRepository.findByStatusAndClinicId(status, clinicId)
+        return examRepository.findByStatusAndClinicId(status, clinicId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
+            else it
+        }
     }
 
     override fun findDoctorExamsByStatus(doctorId: Long, status: ExamStatusEnum): List<Exam> {
-        return examRepository.findByStatusAndDoctorId(status, doctorId)
+        return examRepository.findByStatusAndDoctorId(status, doctorId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
+            else it
+        }
     }
 
     override fun clinicFindByUser(clinicId: Long, userType: UserTypeEnum, userId: Long): List<Exam> {
@@ -86,11 +104,17 @@ class ExamServiceImpl(val examRepository: ExamRepository) : ExamService {
     }
 
     override fun clinicFindByPatient(clinicId: Long, patientId: Long): List<Exam> {
-        return examRepository.findByClinicIdAndPatientId(clinicId, patientId)
+        return examRepository.findByClinicIdAndPatientId(clinicId, patientId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
+            it
+        }
     }
 
     override fun clinicFindByDoctor(clinicId: Long, doctorId: Long): List<Exam> {
-        return examRepository.findByClinicIdAndDoctorId(clinicId, doctorId)
+        return examRepository.findByClinicIdAndDoctorId(clinicId, doctorId).let {
+            if (it.isEmpty()) throw EntityNotFoundException()
+            it
+        }
     }
 
     override fun save(exam: Exam): Exam? {
