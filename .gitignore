@@ -34,3 +34,4 @@ out/
 
 src/main/resources/application.properties
 
+/src/main/kotlin/trabalho/trabalhojedersonbackend/resources/application.properties.properties

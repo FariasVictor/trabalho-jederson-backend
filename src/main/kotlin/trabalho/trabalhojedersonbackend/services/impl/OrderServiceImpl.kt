@@ -20,7 +20,7 @@ class OrderServiceImpl(val orderRepository: OrderRepository,
                         val examService: ExamService) : OrderService {
 
     override fun create(orderRequest: OrderRequest): Long {
-        val order = orderMapper.toPatient(orderRequest)
+        val order = orderMapper.toOrder(orderRequest)
         order.status = OrderStatusEnum.SOLICITACAO_ABERTA
         return orderRepository.save(order).id!!
     }

@@ -2,20 +2,24 @@ package trabalho.trabalhojedersonbackend.services.impl;
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import org.springframework.util.StringUtils.isEmpty
 import trabalho.trabalhojedersonbackend.enums.ExamStatusEnum
 import trabalho.trabalhojedersonbackend.enums.UserTypeEnum
 import trabalho.trabalhojedersonbackend.exceptions.BadRequestException
 import trabalho.trabalhojedersonbackend.exceptions.ExamAlreadyAnalisedException
+import trabalho.trabalhojedersonbackend.mapper.ExamDataMapper
 import trabalho.trabalhojedersonbackend.model.Exam
 import trabalho.trabalhojedersonbackend.model.ExamData
+import trabalho.trabalhojedersonbackend.model.request.ExamDataRequest
+import trabalho.trabalhojedersonbackend.repositories.ExamDataRepository
 import trabalho.trabalhojedersonbackend.repositories.ExamRepository
 import trabalho.trabalhojedersonbackend.services.ExamService
 import java.time.LocalDateTime
 import javax.persistence.EntityNotFoundException
 
 @Service
-class ExamServiceImpl(val examRepository: ExamRepository) : ExamService {
+class ExamServiceImpl(val examRepository: ExamRepository,
+                      val examDataRepository: ExamDataRepository,
+                      val examDataMapper: ExamDataMapper) : ExamService {
 
     override fun findAll(): List<Exam>? = examRepository.findAll()
 
@@ -122,16 +126,18 @@ class ExamServiceImpl(val examRepository: ExamRepository) : ExamService {
         return examRepository.save(exam)
     }
 
-    override fun update(id: Long, examData: List<ExamData>?): Exam {
-        examRepository.findByIdOrNull(id)?.let { exam ->
-            if (exam.status == ExamStatusEnum.EXAME_EM_ANDAMENTO && !isEmpty(examData)) {
-                exam.status = ExamStatusEnum.EXAME_CONCLUIDO
-                exam.examCompletedDate = LocalDateTime.now()
-                exam.examData = examData
-                return examRepository.save(exam)
-            } else if (exam.status == ExamStatusEnum.EXAME_CONCLUIDO) {
-                exam.status = ExamStatusEnum.EXAME_ANALISADO
-                return examRepository.save(exam)
+    override fun update(id: Long, examDataRequests: List<ExamDataRequest>): Exam {
+        examRepository.findByIdOrNull(id)?.let {
+            if (it.status == ExamStatusEnum.EXAME_EM_ANDAMENTO) {
+                it.status = ExamStatusEnum.EXAME_CONCLUIDO
+                it.examCompletedDate = LocalDateTime.now()
+                it.examData = examDataRequests.map {
+                    it -> examDataRepository.save(examDataMapper.toExamData(it))
+                }
+                return examRepository.save(it)
+            } else if (it.status == ExamStatusEnum.EXAME_CONCLUIDO) {
+                it.status = ExamStatusEnum.EXAME_ANALISADO
+                return examRepository.save(it)
             }
             throw ExamAlreadyAnalisedException()
         } ?: throw EntityNotFoundException()

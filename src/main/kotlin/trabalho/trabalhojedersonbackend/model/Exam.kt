@@ -1,6 +1,5 @@
 package trabalho.trabalhojedersonbackend.model
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import trabalho.trabalhojedersonbackend.enums.ExamStatusEnum
 
 import java.time.LocalDateTime
@@ -25,12 +24,11 @@ data class Exam(
 
         val type: String,
 
+        @OneToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+        var examData: List<ExamData>?,
+
         @Enumerated(EnumType.STRING)
         var status: ExamStatusEnum?,
-
-        @JsonIgnore
-        @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-        var examData: List<ExamData>?,
 
         @ManyToOne
         val patient: Patient,

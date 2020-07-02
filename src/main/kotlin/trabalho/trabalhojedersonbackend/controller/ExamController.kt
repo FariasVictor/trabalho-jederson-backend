@@ -9,6 +9,7 @@ import trabalho.trabalhojedersonbackend.exceptions.BadRequestException
 import trabalho.trabalhojedersonbackend.exceptions.ExamAlreadyAnalisedException
 import trabalho.trabalhojedersonbackend.model.Exam
 import trabalho.trabalhojedersonbackend.model.ExamData
+import trabalho.trabalhojedersonbackend.model.request.ExamDataRequest
 import trabalho.trabalhojedersonbackend.services.ExamService
 import java.net.URI
 import javax.persistence.EntityNotFoundException
@@ -76,9 +77,9 @@ class ExamController(private val examService: ExamService) {
 
 
     @PatchMapping("/{id}")
-    fun updateExam(@Valid @PathVariable id: Long, @RequestBody examData: List<ExamData>?): ResponseEntity<Any> {
+    fun updateExam(@Valid @PathVariable id: Long, @RequestBody examDataRequests: List<ExamDataRequest>): ResponseEntity<Any> {
         return try {
-            val exam = examService.update(id, examData)
+            val exam = examService.update(id, examDataRequests)
             ResponseEntity.ok(exam)
         } catch (ex: EntityNotFoundException) {
             ResponseEntity.notFound().build()
